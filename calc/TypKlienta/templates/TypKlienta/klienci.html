@@ -1,0 +1,29 @@
+{% load sitetree %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{{ title }}{% endblock %}</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+     <link rel="stylesheet" href=" {% static 'css/style.css' %}"/>
+</head>
+
+<body>
+<header>{% sitetree_menu from "main_menu" include "trunk, topmenu"%}</header>
+<div class="title_client" >
+    <h1>tabela klienci</h1>
+</div>
+
+<br>
+{% if filter %}
+    <form action="" method="get" class="form form-inline">
+        {% bootstrap_form filter.form layout='inline' %}
+        {% bootstrap_button 'Szukaj' %}
+    </form>
+{% endif %}
+{% render_table table 'django_tables2/bootstrap.html' %}
+</body>
+</html>

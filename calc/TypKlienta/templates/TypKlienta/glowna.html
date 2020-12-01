@@ -1,0 +1,38 @@
+{% load sitetree %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+
+<html lang="en">
+<head>
+    <title>Strona glowna</title>
+    <meta charset="UTF-8">
+    <title>{% block title %}{{ title }}{% endblock %}</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+     <link rel="stylesheet" href=" {% static 'css/style.css' %}"/>
+</head>
+
+<body>
+<header>{% sitetree_menu from "main_menu" include "trunk, topmenu"%}</header>
+<div class="title_client" >
+    <h1>Strona główna</h1>
+</div>
+
+<div class="input_name">
+    <h1>The input element</h1>
+
+
+<form action="{% url 'index' %}" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="OK">
+</form>
+
+<p>Click the "Submit" button and the form-data will be sent to a page on the
+server called "action_page.php".</p>
+
+</div>
+
+</body>
+</head>
+</html>
