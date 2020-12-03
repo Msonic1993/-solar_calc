@@ -1,4 +1,4 @@
-from TypKlienta.models import klient,KadNachyleniaDachu
+from TypKlienta.models import klient,KadNachyleniaDachu,EkspozycjaDachowa
 from django.forms import ModelForm
 from django import forms
 
@@ -14,3 +14,9 @@ class RoofSlopeAngleForm(forms.Form):
         # fields = ['kadnachylenia',]
         kadnachylenia = forms.ModelChoiceField(queryset=KadNachyleniaDachu.objects.all(),label="Wybierz kąt nachylenia dachu")
 
+
+class RoofExposition(forms.Form):
+    # model = KadNachyleniaDachu
+    # fields = ['kadnachylenia',]
+    ekspozycja = forms.ModelChoiceField(queryset=EkspozycjaDachowa.objects.all(),
+                                           label="Wybierz ekspozycje dachową")

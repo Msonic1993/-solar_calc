@@ -8,6 +8,15 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
+
+class  WymaganaMocInstalacji(BaseModel):
+    def __str__(self):
+        return self.WymaganaMoc
+
+    IdKlienta = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+    WymaganaMoc = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+
+
 class TypKlienta(BaseModel):
 
     def __str__(self):
@@ -28,8 +37,10 @@ class BaseModel(models.Model):
 class klient(BaseModel):
 
     def __str__(self):
-        return self.imie + " " + self.nazwisko + " " + self.ulica
+        return self.imie + " "
 
+    def __unicode__(self):
+        return self.IdKlienta
 
     IdKlienta = models.AutoField(primary_key=True)
     data =  models.DateTimeField(default=datetime.now)
@@ -39,8 +50,11 @@ class klient(BaseModel):
     miasto = models.CharField(max_length=100)
     telefon = models.CharField(max_length=11)
     typ = models.ForeignKey(TypKlienta, to_field='nazwa',null=True, on_delete=models.CASCADE)
-    metraz = models.IntegerField()
-    zuzycie = models.IntegerField()
+
+    metraz = models.IntegerField(null=True)
+    zuzycie = models.IntegerField(null=True)
+    WymaganaMoc = models.ForeignKey(WymaganaMocInstalacji, null=True, on_delete=models.CASCADE)
+
 
     class Meta:
         verbose_name = "Klient"
@@ -57,6 +71,7 @@ class Vat(BaseModel):
     class Meta:
         verbose_name = "Vat"
         verbose_name_plural = "Vat"
+
 class KadNachyleniaDachu(BaseModel):
     def __str__(self):
         return self.kadnachylenia
@@ -78,3 +93,4 @@ class EkspozycjaDachowa(BaseModel):
     class Meta:
         verbose_name = "Ekspozycja dachowa"
         verbose_name_plural = "Ekspozycja dachowa"
+
