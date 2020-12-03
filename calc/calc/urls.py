@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from TypKlienta.views import index
+from TypKlienta.views import index, wynik
 from TypKlienta.views import klienciListView
 
 
@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
     path("klienci/", klienciListView.as_view()),
+    path("wynik/", wynik)
     # path('typklienta/<id>/', typklienta, name='typklienta'),
     # # path('vat/<id>/', vat, name='vat')
 ]

@@ -2,6 +2,7 @@
 {% load static %}
 {% load render_table from django_tables2 %}
 {% load bootstrap3 %}
+{% load myTags %}
 
 <html lang="en">
 <head>
@@ -25,14 +26,22 @@
 <form action="{% url 'index' %}" method="post">
     {% csrf_token %}
     {{form.as_p}}
+     {{form2.as_p}}
     <input type="submit" value="OK">
 </form>
+<br>
+<br>
+<br>
+<!-- <form action="{% url 'index' %}" method="post">-->
+<!--    {% csrf_token %}-->
+<!--    {{form2.as_p}}-->
+<!--    <input type="submit" value="OK">-->
+<!--</form>-->
 
-<p>Click the "Submit" button and the form-data will be sent to a page on the
-server called "action_page.php".</p>
+ <p>Nowe zuzycie: {{ wynik }}</p>
 
 </div>
 
 </body>
-</head>
+
 </html>

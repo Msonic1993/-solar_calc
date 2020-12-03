@@ -44,9 +44,7 @@ INSTALLED_APPS = [
     'django_tables2',
     'django_filters',
     'bootstrap3',
-    'sitetree'
-
-
+    'sitetree',
 ]
 
 MIDDLEWARE = [
