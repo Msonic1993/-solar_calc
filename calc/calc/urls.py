@@ -13,17 +13,27 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from TypKlienta import views
+from django.conf.urls import url
 from django.contrib import admin
-from django.urls import path
-from TypKlienta.views import index, wynik
+from django.urls import path, include
+from TypKlienta.views import index,register
 from TypKlienta.views import klienciListView
-
+from django_filters.views import FilterView
+from TypKlienta.filters import KlientFilter
+from django.contrib.auth import views as auth_views
+from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
-    path("klienci/", klienciListView.as_view()),
-    path("wynik/", wynik)
+    url(r'^klienci/$', FilterView.as_view(filterset_class=KlientFilter,
+                                         template_name='TypKlienta/klienci.html'), name='klienci'),
+    path("wynik/", index,name="wynik"),
     # path('typklienta/<id>/', typklienta, name='typklienta'),
     # # path('vat/<id>/', vat, name='vat')
+    path('register/',LoginView.as_view(template_name='TypKlienta/login.html'),name="login"),
+    path('login/',LoginView.as_view(template_name='TypKlienta/login.html'),name="login"),
+    path('logout/',  LogoutView.as_view(template_name='TypKlienta/logout.html'), name="login"),
+    path('', include("django.contrib.auth.urls")),
 ]

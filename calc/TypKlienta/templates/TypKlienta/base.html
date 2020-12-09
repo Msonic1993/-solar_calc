@@ -1,0 +1,53 @@
+{% load sitetree %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+{% load myTags %}
+
+
+<html lang="pl">
+ <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href=" {% static 'css/style.css' %}"/>
+     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <div class="page-header">
+          {% if user.is_authenticated %}
+               <p> <a href="/logout">Wyloguj się</a> </p>
+           {% else %}
+                <p> Niezalogowany </p>
+            {% endif %}
+        {% sitetree_menu from "main_menu" include "trunk, topmenu"%}
+        <h1><a href="">Django </a></h1>
+    </div>
+    <div class="content" style="width:100%">
+        <div class="row">
+
+           {% if user.is_authenticated %}
+                {% block content %}
+                {% endblock %}
+           {% else %}
+                <p> <a href="/login">Kliknij tutaj by się zalogować.</a> </p>
+            {% endif %}
+            </div>
+
+    </div>
+  <footer id="sticky-footer" class="py-4 bg-dark text-white-50" style="background-color: coral;;position:fixed;bottom:0;left:0; width:100%">
+    <div class="container text-center">
+      <small style="color: white;  ">Copyright &copy; 2020</small>
+    </div>
+  </footer>
+ <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>

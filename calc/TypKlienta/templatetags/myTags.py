@@ -5,4 +5,4 @@ register = template.Library()
 
 @register.filter
 def NoweZuzycie(zuzycie,mnoznik):
-    return zuzycie * mnoznik
+ return zuzycie * mnoznik

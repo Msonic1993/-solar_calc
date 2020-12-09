@@ -1,48 +1,33 @@
+{% extends 'TypKlienta/base.html' %}
 {% load sitetree %}
 {% load static %}
 {% load render_table from django_tables2 %}
 {% load bootstrap3 %}
 {% load myTags %}
 
-<html lang="en">
-<head>
-    <title>Strona glowna</title>
-    <meta charset="UTF-8">
-    <title>{% block title %}{{ title }}{% endblock %}</title>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-     <link rel="stylesheet" href=" {% static 'css/style.css' %}"/>
-</head>
 
-<body>
-<header>{% sitetree_menu from "main_menu" include "trunk, topmenu"%}</header>
-<div class="title_client" >
+
+{% block content %}
+
     <h1>Strona główna</h1>
-</div>
+
 
 <div class="input_name">
     <h1>The input element</h1>
 
 
-<form action="" method="post">
+<form action="{% url 'index' %}" method="post">
     {% csrf_token %}
     {{form.as_p}}
-    {{form2.as_p}}
-    {{form3.as_p}}
     <input type="submit" value="Zapisz klienta i oblicz">
 </form>
 <br>
 <br>
 <br>
-<!-- <form action="" method="post">-->
-<!--    {% csrf_token %}-->
-<!--    {{form2.as_p}}-->
-<!--    <input type="submit" value="Oblicz moc instalacji">-->
-<!--</form>-->
 
  <p>Nowe zuzycie: {{ wynik }}</p>
 
 </div>
 
-</body>
 
-</html>
+ {% endblock %}

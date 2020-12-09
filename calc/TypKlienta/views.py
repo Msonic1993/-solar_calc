@@ -1,12 +1,21 @@
+from django.contrib.auth import authenticate, login
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, request
 from django.urls import reverse
 from django_tables2 import SingleTableView
 from django_filters.views import FilterView
+import datetime
+from django.shortcuts import render, redirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic.edit import CreateView
+from django.http import JsonResponse
+from .forms import SignUpForm
 from .calculation import PowerComsumption
 from .filters import KlientFilter
-from .forms import DodajKlienta, RoofSlopeAngleForm, RoofExposition
+from .forms import DodajKlienta
 from .models import TypKlienta, Vat, klient, KadNachyleniaDachu, WymaganaMocInstalacji, EkspozycjaDachowa
 from .tables import KlientTable
 from django_tables2.views import SingleTableMixin
@@ -14,41 +23,62 @@ from django.shortcuts import render
 
 def index(request):
 
-    form2 = RoofSlopeAngleForm()
+
     if request.method == 'POST':
         form=DodajKlienta(request.POST)
-        form2 = RoofSlopeAngleForm(request.POST)
-        form3 = RoofExposition(request.POST)
 
-        if form.is_valid() & form2.is_valid() & form3.is_valid() :
+
+        if form.is_valid():
             form.save()
             zuzycie = form.cleaned_data['zuzycie']
             metraz = form.cleaned_data['metraz']
-            kadnachylenia = form2.cleaned_data['kadnachylenia']
-            ekspozycja = form3.cleaned_data['ekspozycja']
+            kadnachylenia = form.cleaned_data['kadNachyleniaDachu']
+            ekspozycja = form.cleaned_data['ekspozycjaDachowa']
+            Imieklienta = form.cleaned_data['imie']
+            NazwiskoKlienta = form.cleaned_data['nazwisko']
+
 
             przelicznik = KadNachyleniaDachu.objects.get(kadnachylenia=kadnachylenia).przelicznik
             mnoznik = EkspozycjaDachowa.objects.get(ekspozycja=ekspozycja).mnoznik
             obliczenie =PowerComsumption(zuzycie,metraz,kadnachylenia,przelicznik,ekspozycja,mnoznik)
             wynik = obliczenie.count_Comsumption()
 
-            GetId = klient.objects.last().IdKlienta
+            GetId = klient.objects.get(imie=Imieklienta, nazwisko=NazwiskoKlienta,zuzycie=zuzycie,metraz=metraz).IdKlienta
             insertMocInstalacji = WymaganaMocInstalacji(IdKlienta= GetId, WymaganaMoc= wynik )
             insertMocInstalacji.save()
-            klient.objects.filter(IdKlienta=GetId).update(field1='some value')
+
+            x= WymaganaMocInstalacji.objects.get(IdKlienta=GetId).id
+            klient.objects.filter(IdKlienta= GetId).update(WymaganaMoc_id=x)
+            # klient.objects.filter(IdKlienta=GetId).update(field1='some value')
 
             return render(request, 'TypKlienta/glowna.html', { 'wynik': wynik})
-    return  render(request, 'TypKlienta/glowna.html', {'form': DodajKlienta(),'form2': RoofSlopeAngleForm(),'form3': RoofExposition()  })
+    return  render(request, 'TypKlienta/glowna.html', {'form': DodajKlienta() })
 
-def  wynik(request):
+# def  wynik(request):
+#
+#
+#     return render(request,'TypKlienta/wynik.html', {'wynik': wynik1},)
 
-    wynik1 = wynik
+def  klienciListView(request):
+    user_list = klient.objects.all()
+    user_filter = KlientFilter(request.GET, queryset=user_list)
+    return render(request, 'TypKlienta/klienci.html', {'filter': user_filter})
 
-    return render(request,'TypKlienta/wynik.html', {'wynik1': wynik1},)
 
-class  klienciListView(SingleTableMixin,FilterView):
-    model = klient
-    table_class = KlientTable
-    template_name = 'TypKlienta/klienci.html'
-    filter = KlientFilter()
+def register(request):
 
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            for i in form:
+                print(i)
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('index')
+
+    else:
+        form = SignUpForm()
+    return render(request, 'TypKlienta/register.html', {'form': form})

@@ -1,7 +1,7 @@
 from .models import klient,KadNachyleniaDachu
-from .forms import RoofSlopeAngleForm
+from .forms import DodajKlienta
 class PowerComsumption():
-    RoofSlopeAngleForm()
+
 
 
     def __init__(self,zuzycie,metraz,kadnachylenia,przelicznik,ekspozycja,mnoznik):
@@ -20,7 +20,7 @@ class PowerComsumption():
             self.wynik = zuzycie
 
         if ekspozycja:
-            self.wynik = self.wynik *  mnoznik
+            self.wynik = self.wynik *  mnoznik * 1.2
         else:
             self.wynik = zuzycie
 
