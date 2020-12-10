@@ -54,7 +54,7 @@ class KadNachyleniaDachu(BaseModel):
 
 class Moduly(BaseModel):
     def __str__(self):
-        return self.model
+        return str(self.model)
 
     producent = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
@@ -69,7 +69,7 @@ class Moduly(BaseModel):
 
 class Falowniki(BaseModel):
     def __str__(self):
-        return self.model
+        return str(self.model)
 
     producent = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
@@ -161,6 +161,8 @@ class klient(BaseModel):
     metraz = models.IntegerField(null=False)
     zuzycie = models.IntegerField(null=False)
     WymaganaMoc = models.ForeignKey(WymaganaMocInstalacji, null=True, on_delete=models.CASCADE)
+    KamId = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+
 
 
     class Meta:

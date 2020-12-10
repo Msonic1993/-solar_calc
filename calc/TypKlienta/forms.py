@@ -1,4 +1,4 @@
-from TypKlienta.models import klient
+from TypKlienta.models import klient,Moduly,Falowniki
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
@@ -11,17 +11,6 @@ class DodajKlienta(ModelForm):
         model = klient
         fields = ("typ","imie", "nazwisko", "ulica", "miasto", "telefon", "metraz","ekspozycjaDachowa", "kadNachyleniaDachu","zuzycie")
 
-# class RoofSlopeAngleForm(forms.Form):
-#         # model = KadNachyleniaDachu
-#         # fields = ['kadnachylenia',]
-#         kadnachylenia = forms.ModelChoiceField(queryset=KadNachyleniaDachu.objects.all(),label="Wybierz kąt nachylenia dachu")
-#
-#
-# class RoofExposition(forms.Form):
-#     # model = KadNachyleniaDachu
-#     # fields = ['kadnachylenia',]
-#     ekspozycja = forms.ModelChoiceField(queryset=EkspozycjaDachowa.objects.all(),
-#                                            label="Wybierz ekspozycje dachową")
 
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
@@ -31,3 +20,25 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2',)
+
+class Moduly(forms.Form):
+
+    Producent = forms.ModelChoiceField(
+            queryset=Moduly.objects.values_list("producent", flat=True).distinct(),
+            empty_label=None
+        )
+    Model = forms.ModelChoiceField(
+        queryset=Moduly.objects.values_list("model", flat=True).distinct(),
+        empty_label=None
+    )
+
+class Falowniki(forms.Form):
+
+    Producent = forms.ModelChoiceField(
+            queryset=Falowniki.objects.values_list("producent", flat=True).distinct(),
+            empty_label=None
+        )
+    Model = forms.ModelChoiceField(
+        queryset=Falowniki.objects.values_list("model", flat=True).distinct(),
+        empty_label=None
+    )

@@ -1,0 +1,29 @@
+{% extends 'TypKlienta/base.html' %}
+{% load sitetree %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+{% load myTags %}
+
+{% block title %}Kalkulacja cenowa{% endblock %}
+
+{% block content %}
+<h3>Sugerowana moc instalacji wynosi: {{SugerowanaMoc}} </h3>
+
+<br>
+<br>
+<div>
+<form method=POST action="">
+    {% csrf_token %}
+        {{ form }}
+
+      <input type="submit" value="oblicz">
+</form>
+    <form method=POST action="">
+        {% csrf_token %}
+        {{ form1 }}
+</form>
+<p>Liczba modułów: {{LiczbaModulow}}  </p>
+</div>
+
+{% endblock %}

@@ -1,10 +1,16 @@
 import django_filters
-
 from TypKlienta.models import klient
 
 
 class KlientFilter(django_filters.FilterSet):
 
+
         class Meta:
             model = klient
-            fields = fields = ['imie', 'nazwisko']
+
+            fields = ['imie', 'nazwisko']
+        @property
+        def qs(self):
+            if self.request.user.is_authenticated:
+                primary_queryset = super(KlientFilter, self).qs
+                return primary_queryset.filter(KamId=self.request.user)

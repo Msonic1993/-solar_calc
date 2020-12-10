@@ -12,10 +12,12 @@ from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
 from django.http import JsonResponse
+
+from .calculation2 import PriceCalculation
 from .forms import SignUpForm
 from .calculation import PowerComsumption
 from .filters import KlientFilter
-from .forms import DodajKlienta
+from .forms import DodajKlienta,Moduly,Falowniki
 from .models import TypKlienta, Vat, klient, KadNachyleniaDachu, WymaganaMocInstalacji, EkspozycjaDachowa
 from .tables import KlientTable
 from django_tables2.views import SingleTableMixin
@@ -54,15 +56,34 @@ def index(request):
             return render(request, 'TypKlienta/glowna.html', { 'wynik': wynik})
     return  render(request, 'TypKlienta/glowna.html', {'form': DodajKlienta() })
 
-# def  wynik(request):
-#
-#
-#     return render(request,'TypKlienta/wynik.html', {'wynik': wynik1},)
 
 def  klienciListView(request):
     user_list = klient.objects.all()
     user_filter = KlientFilter(request.GET, queryset=user_list)
     return render(request, 'TypKlienta/klienci.html', {'filter': user_filter})
+
+def KalkulacjaCenowa(request):
+
+    if request.method == 'POST':
+        SugerowanaMoc = klient.objects.last().WymaganaMoc
+        form=Moduly(request.POST)
+        form1 = Falowniki(request.POST)
+
+        model = ['model']
+        # metraz = form.cleaned_data['metraz']
+        # kadnachylenia = form.cleaned_data['kadNachyleniaDachu']
+        # ekspozycja = form.cleaned_data['ekspozycjaDachowa']
+        # Imieklienta = form.cleaned_data['imie']
+        # NazwiskoKlienta = form.cleaned_data['nazwisko']
+        MocModulu = 3
+        SugerowanaMoc1 = 2
+        obliczenie2 = PriceCalculation(MocModulu,SugerowanaMoc,model)
+        LiczbaModulow = obliczenie2.count_PriceCalculation()
+
+        return render(request, 'TypKlienta/kalkulacjacenowa.html', { 'SugerowanaMoc': SugerowanaMoc,'form': Moduly(),'form1': Falowniki(), 'LiczbaModulow': LiczbaModulow})
+
+
+
 
 
 def register(request):

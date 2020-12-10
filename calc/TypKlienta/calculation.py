@@ -26,3 +26,4 @@ class PowerComsumption():
 
     def count_Comsumption(self):
         return self.wynik
+

@@ -19,16 +19,21 @@
   </head>
   <body>
     <div class="page-header">
+
           {% if user.is_authenticated %}
-               <p> <a href="/logout">Wyloguj się</a> </p>
+
+               <p>jesteś zalogowany jako : {{user}} <a href="/logout"> Wyloguj się</a> </p>
            {% else %}
                 <p> Niezalogowany </p>
             {% endif %}
         {% sitetree_menu from "main_menu" include "trunk, topmenu"%}
         <h1><a href="">Django </a></h1>
     </div>
-    <div class="content" style="width:100%">
-        <div class="row">
+    <div class="container" style="width:100%">
+        <div class="col">
+      <div class="row" style="margin-right: 5px;margin-left: 5px;">
+    </div>
+    <div class="col">
 
            {% if user.is_authenticated %}
                 {% block content %}
