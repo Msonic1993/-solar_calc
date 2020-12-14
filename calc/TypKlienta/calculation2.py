@@ -1,20 +1,21 @@
+from decimal import Decimal
+
+
 class PriceCalculation():
 
 
 
-    def __init__(self,MocModulu,SugerowanaMoc1,LiczbaModulow,model):
+    def __init__(self,MocModulu,xx,modelform,Decimalform2):
 
-        self.MocModulu = MocModulu
-        self.model = model
-        self.SugerowanaMoc = SugerowanaMoc1
-        self.LiczbaModulow = LiczbaModulow
+        self.MocModulu = Decimal(MocModulu)
+        self.xx = Decimal(xx)
+        self.modelform = modelform
+        self.Decimalform2 = Decimal(Decimalform2)
 
 
-        if model:
+        if modelform:
+            self.LiczbaModulow =(Decimal(xx)/ MocModulu/1000) + Decimal(Decimalform2)
 
-            self.LiczbaModulow = SugerowanaMoc1 / MocModulu
-        else:
-            self.LiczbaModulow = SugerowanaMoc1
 
     def count_PriceCalculation(self):
         return self.LiczbaModulow

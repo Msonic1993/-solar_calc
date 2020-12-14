@@ -16,14 +16,18 @@
 <form method=POST action="">
     {% csrf_token %}
         {{ form }}
+    <br><br>
 
-      <input type="submit" value="oblicz">
+  <label for="dodatkowaliczba">Wpisz dodatkową ilość modułów:</label>
+  <input type="number" id="dodatkowaliczba" name="dodatkowaliczba"><br><br>
+
+
+        <input type="submit" value="oblicz">
+
+
 </form>
-    <form method=POST action="">
-        {% csrf_token %}
-        {{ form1 }}
-</form>
-<p>Liczba modułów: {{LiczbaModulow}}  </p>
+        <p>Liczba modułów: {{ LiczbaModulow }}  </p>
+
 </div>
 
 {% endblock %}

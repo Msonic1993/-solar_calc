@@ -17,8 +17,8 @@ from .calculation2 import PriceCalculation
 from .forms import SignUpForm
 from .calculation import PowerComsumption
 from .filters import KlientFilter
-from .forms import DodajKlienta,Moduly,Falowniki
-from .models import TypKlienta, Vat, klient, KadNachyleniaDachu, WymaganaMocInstalacji, EkspozycjaDachowa
+from .forms import DodajKlienta,ModulyForm,Falowniki
+from .models import TypKlienta, Vat, klient, KadNachyleniaDachu, WymaganaMocInstalacji, EkspozycjaDachowa, Moduly
 from .tables import KlientTable
 from django_tables2.views import SingleTableMixin
 from django.shortcuts import render
@@ -63,24 +63,34 @@ def  klienciListView(request):
     return render(request, 'TypKlienta/klienci.html', {'filter': user_filter})
 
 def KalkulacjaCenowa(request):
+    y= klient.objects.last().WymaganaMoc
 
     if request.method == 'POST':
-        SugerowanaMoc = klient.objects.last().WymaganaMoc
-        form=Moduly(request.POST)
-        form1 = Falowniki(request.POST)
+        form=ModulyForm(request.POST)
+        form2 = request.POST['dodatkowaliczba']
 
-        model = ['model']
-        # metraz = form.cleaned_data['metraz']
-        # kadnachylenia = form.cleaned_data['kadNachyleniaDachu']
-        # ekspozycja = form.cleaned_data['ekspozycjaDachowa']
-        # Imieklienta = form.cleaned_data['imie']
-        # NazwiskoKlienta = form.cleaned_data['nazwisko']
-        MocModulu = 3
-        SugerowanaMoc1 = 2
-        obliczenie2 = PriceCalculation(MocModulu,SugerowanaMoc,model)
-        LiczbaModulow = obliczenie2.count_PriceCalculation()
+        if form.is_valid():
+           print("")
+        else:
+            modelform= form["Model"].value()
+            modelform2 = form2
+            Decimalform2= str(form2)
+            if Decimalform2 =="":
+                Decimalform2 = 0.00
+            # metraz = form.cleaned_data['metraz']
+            # kadnachylenia = form.cleaned_data['kadNachyleniaDachu']
+            # ekspozycja = form.cleaned_data['ekspozycjaDachowa']
+            # Imieklienta = form.cleaned_data['imie']
+            # NazwiskoKlienta = form.cleaned_data['nazwisko']
+            MocModulu = Moduly.objects.get(model=modelform).moc
+            SugerowanaMoc1 = klient.objects.last().WymaganaMoc
+            xx = str(SugerowanaMoc1)
+            obliczenie1 = PriceCalculation(MocModulu, xx,modelform,Decimalform2)
+            LiczbaModulow = obliczenie1.count_PriceCalculation()
 
-        return render(request, 'TypKlienta/kalkulacjacenowa.html', { 'SugerowanaMoc': SugerowanaMoc,'form': Moduly(),'form1': Falowniki(), 'LiczbaModulow': LiczbaModulow})
+
+            return render(request, 'TypKlienta/kalkulacjacenowa.html',{'SugerowanaMoc': y,'LiczbaModulow': LiczbaModulow, 'modelform': modelform,'form': ModulyForm() })
+    return  render(request, 'TypKlienta/kalkulacjacenowa.html', {'form': ModulyForm(),'SugerowanaMoc': y })
 
 
 

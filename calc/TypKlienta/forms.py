@@ -21,13 +21,9 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = ('username', 'email', 'password1', 'password2',)
 
-class Moduly(forms.Form):
+class ModulyForm(forms.Form):
 
-    Producent = forms.ModelChoiceField(
-            queryset=Moduly.objects.values_list("producent", flat=True).distinct(),
-            empty_label=None
-        )
-    Model = forms.ModelChoiceField(
+     Model = forms.ModelChoiceField(
         queryset=Moduly.objects.values_list("model", flat=True).distinct(),
         empty_label=None
     )

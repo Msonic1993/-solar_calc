@@ -18,9 +18,9 @@
           {{ filter.form.nazwisko.label_tag }}
           {% render_field filter.form.nazwisko class="form-control" %}
         </div>
-        <div class="form-group col-sm-4 col-md-3">
-          {{ filter.form.last_name.label_tag }}
-          {% render_field filter.form.last_name class="form-control" %}
+          <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.KamId.label_tag }}
+          {% render_field filter.form.KamId class="form-control" %}
         </div>
         <div class="form-group col-sm-4 col-md-3">
           {{ filter.form.year_joined.label_tag }}
@@ -50,16 +50,17 @@
         <th>Ulica</th>
         <th>Miasto</th>
         <th>Telefon</th>
-        <th>Ekspozycja dachowa</th>
-        <th>Kąd nachylenia dachu</th>
         <th>Metraż</th>
         <th>Zużycie</th>
-        <th>Wymagana moc instalacji</th>
+        <th>Wymagana moc</th>
+        <th>user</th>
+
 
       </tr>
     </thead>
     <tbody>
-      {% for klient in filter.qs %}
+      {% for klient in filter.qs  %}
+
         <tr>
           <td>{{ klient.imie }}</td>
           <td>{{ klient.nazwisko  }}</td>
@@ -67,10 +68,10 @@
           <td>{{ klient.miasto }}</td>
           <td>{{ klient.telefon }}</td>
           <td>{{ klient.typ }}</td>
-          <td>{{ klient.ekspozycjaDachowa }}</td>
-          <td>{{ klient.kadNachyleniaDachu }}</td>
           <td>{{ klient.zuzycie }}</td>
           <td>{{ klient.WymaganaMoc }}</td>
+          <td>{{ klient.KamId }}</td>
+
 
 
         </tr>
