@@ -11,6 +11,9 @@
 <h3>Sugerowana moc instalacji wynosi: {{SugerowanaMoc}} kWp</h3>
 <h3>Nazwa modułu : {{NazwaModuluStr}} </h3>
 <h3>Liczba modułów: {{LiczbaModulowStr}} </h3>
+<h3>Nazwa falownika : {{NazwaFalownikaStr}} </h3>
+<h3>Liczba falowników: {{LiczbaFalownikowStr}} </h3>
+
 
 <br>
 <br>
@@ -20,19 +23,19 @@
         {{ form }}
     <br><br>
 
-  <label for="IloscFalownikow">Wpisz liczbę falowników:</label>
-  <input type="number" id="IloscFalownikow" name="IloscFalownikow"><br><br>
+  <label for="IloscOptymalizatorow">Wpisz liczbę optymalizatorów (jeśli brak pozostaw puste):</label>
+  <input type="number" id="IloscOptymalizatorow" name="IloscOptymalizatorow"><br><br>
 
     <button type="submit" value="oblicz" class="btn btn-primary">Oblicz</button>
 
 </form>
-        <p>wartość: {{ WartoscKalownikow }}  </p>
-        <p>Wybrano falownik:: {{ modelform }}  </p>
+        <p>wartość: {{ WartoscOptymalizatorow }}  </p>
+        <p>Wybrano Optymalizator: {{ modelform }}  </p>
 
 </div>
  <br><br>
 <div>
-     <a href="/kalkulacjaoptymaliztorymocy"> <button type="submit" class="btn btn-info">Przejdz do nastepnego kroku</button></a>
+     <a href=""> <button type="submit" class="btn btn-info">Przejdz do nastepnego kroku</button></a>
 </div>
 
 {% endblock %}

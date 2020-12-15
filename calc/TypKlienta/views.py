@@ -15,11 +15,12 @@ from django.http import JsonResponse
 
 from .calculation2 import PriceCalculation
 from .calculation3 import PriceCalculationFalowniki
-from .forms import SignUpForm
+from .calculation4 import PriceCalculationOptymalizatory
+from .forms import SignUpForm, OptymalizatoryForm
 from .calculation import PowerComsumption
 from .filters import KlientFilter
 from .forms import DodajKlienta,ModulyForm,FalownikiForm
-from .models import TypKlienta, Vat, klient, KadNachyleniaDachu, WymaganaMocInstalacji, EkspozycjaDachowa, Moduly,Falowniki
+from .models import TypKlienta, Vat, klient, KadNachyleniaDachu, WymaganaMocInstalacji, EkspozycjaDachowa, Moduly,Falowniki,Optymalizatory
 from .tables import KlientTable
 from django_tables2.views import SingleTableMixin
 from django.shortcuts import render
@@ -124,7 +125,36 @@ def KalkulacjaFalownika(request):
     return  render(request, 'TypKlienta/kalkulacjafalownika.html' ,{'form': FalownikiForm(),'SugerowanaMoc': y,'LiczbaModulowStr': LiczbaModulowStr,'NazwaModuluStr': NazwaModuluStr })
 
 
+def KalkulacjaOptymalizatory(request):
+    y= klient.objects.last().WymaganaMoc
+    LiczbaModulowStr = klient.objects.last().LiczbaModulow
+    NazwaModuluStr = klient.objects.last().NazwaModulu
+    LiczbaFalownikowStr = klient.objects.last().LiczbaFalownikow
+    NazwaFalownikaStr = klient.objects.last().NazwaFalownika
 
+    if request.method == 'POST':
+        form=OptymalizatoryForm(request.POST)
+        form2 = request.POST['IloscOptymalizatorow']
+
+        if form.is_valid():
+           print("")
+        else:
+            modelform= form["Model"].value()
+            intform2= str(form2)
+            if intform2 =="":
+                intform2 = 0
+
+            CenaOptymalizatora = Optymalizatory.objects.get(model=modelform).cenanetto
+            obliczenie1 = PriceCalculationOptymalizatory(modelform,intform2,CenaOptymalizatora)
+            WartoscOptymalizatorow = obliczenie1.count_PriceCalculationOptymalizatory()
+
+            # LatestData = klient.objects.latest("data").IdKlienta
+            # klient.objects.filter(IdKlienta=LatestData).update(LiczbaFalownikow=intform2)
+            # klient.objects.filter(IdKlienta=LatestData).update(WartoscFalownikow=WartoscFalownikow)
+            # klient.objects.filter(IdKlienta=LatestData).update(NazwaFalownika=modelform)
+
+            return render(request, 'TypKlienta/kalkulacjaoptymaliztorymocy.html',{'SugerowanaMoc': y,'LiczbaModulowStr': LiczbaModulowStr,'NazwaModuluStr': NazwaModuluStr,'WartoscOptymalizatorow': WartoscOptymalizatorow,'LiczbaFalownikowStr': LiczbaFalownikowStr,'NazwaFalownikaStr': NazwaFalownikaStr ,'modelform': modelform,'form': OptymalizatoryForm(),'form2':form2 })
+    return  render(request, 'TypKlienta/kalkulacjaoptymaliztorymocy.html' ,{'form': OptymalizatoryForm(),'SugerowanaMoc': y,'LiczbaModulowStr': LiczbaModulowStr,'NazwaModuluStr': NazwaModuluStr,'LiczbaFalownikowStr': LiczbaFalownikowStr,'NazwaFalownikaStr': NazwaFalownikaStr })
 
 
 

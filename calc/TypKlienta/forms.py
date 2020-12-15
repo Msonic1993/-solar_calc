@@ -1,4 +1,4 @@
-from TypKlienta.models import klient,Moduly,Falowniki
+from TypKlienta.models import klient,Moduly,Falowniki,Optymalizatory
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
@@ -33,4 +33,11 @@ class FalownikiForm(forms.Form):
     Model = forms.ModelChoiceField(
         queryset=Falowniki.objects.values_list("model", flat=True).distinct(),
         empty_label=None
+    )
+
+class OptymalizatoryForm(forms.Form):
+
+    Model = forms.ModelChoiceField(
+        queryset=Optymalizatory.objects.values_list("model", flat=True).distinct(),
+        empty_label="brak"
     )
