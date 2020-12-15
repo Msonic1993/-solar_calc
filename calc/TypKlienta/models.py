@@ -161,6 +161,12 @@ class klient(BaseModel):
     metraz = models.IntegerField(null=False)
     zuzycie = models.IntegerField(null=False)
     WymaganaMoc = models.ForeignKey(WymaganaMocInstalacji, null=True, on_delete=models.CASCADE)
+    LiczbaModulow = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+    NazwaModulu = models.CharField(max_length=100,null=True)
+    WartoscModulow = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+    NazwaFalownika = models.CharField(max_length=100, null=True)
+    LiczbaFalownikow = models.IntegerField( null=True)
+    WartoscFalownikow = models.DecimalField(max_digits=100, decimal_places=2, null=True)
     KamId = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
 

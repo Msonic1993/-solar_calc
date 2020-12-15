@@ -28,12 +28,8 @@ class ModulyForm(forms.Form):
         empty_label=None
     )
 
-class Falowniki(forms.Form):
+class FalownikiForm(forms.Form):
 
-    Producent = forms.ModelChoiceField(
-            queryset=Falowniki.objects.values_list("producent", flat=True).distinct(),
-            empty_label=None
-        )
     Model = forms.ModelChoiceField(
         queryset=Falowniki.objects.values_list("model", flat=True).distinct(),
         empty_label=None

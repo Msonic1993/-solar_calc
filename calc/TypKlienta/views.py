@@ -14,11 +14,12 @@ from django.views.generic.edit import CreateView
 from django.http import JsonResponse
 
 from .calculation2 import PriceCalculation
+from .calculation3 import PriceCalculationFalowniki
 from .forms import SignUpForm
 from .calculation import PowerComsumption
 from .filters import KlientFilter
-from .forms import DodajKlienta,ModulyForm,Falowniki
-from .models import TypKlienta, Vat, klient, KadNachyleniaDachu, WymaganaMocInstalacji, EkspozycjaDachowa, Moduly
+from .forms import DodajKlienta,ModulyForm,FalownikiForm
+from .models import TypKlienta, Vat, klient, KadNachyleniaDachu, WymaganaMocInstalacji, EkspozycjaDachowa, Moduly,Falowniki
 from .tables import KlientTable
 from django_tables2.views import SingleTableMixin
 from django.shortcuts import render
@@ -73,24 +74,55 @@ def KalkulacjaCenowa(request):
            print("")
         else:
             modelform= form["Model"].value()
-            modelform2 = form2
             Decimalform2= str(form2)
             if Decimalform2 =="":
                 Decimalform2 = 0.00
-            # metraz = form.cleaned_data['metraz']
-            # kadnachylenia = form.cleaned_data['kadNachyleniaDachu']
-            # ekspozycja = form.cleaned_data['ekspozycjaDachowa']
-            # Imieklienta = form.cleaned_data['imie']
-            # NazwiskoKlienta = form.cleaned_data['nazwisko']
+
             MocModulu = Moduly.objects.get(model=modelform).moc
+            CenaModulu = Moduly.objects.get(model=modelform).cenanetto
             SugerowanaMoc1 = klient.objects.last().WymaganaMoc
             xx = str(SugerowanaMoc1)
-            obliczenie1 = PriceCalculation(MocModulu, xx,modelform,Decimalform2)
-            LiczbaModulow = obliczenie1.count_PriceCalculation()
+            obliczenie1 = PriceCalculation(MocModulu, xx,modelform,Decimalform2,CenaModulu)
+            LiczbaModulow = obliczenie1.count_PriceCalculation()[0]
+            WartoscModulow= obliczenie1.count_PriceCalculation()[1]
+            LatestData = klient.objects.latest("data").IdKlienta
+            klient.objects.filter(IdKlienta=LatestData).update(LiczbaModulow=LiczbaModulow)
+            klient.objects.filter(IdKlienta=LatestData).update(WartoscModulow=WartoscModulow)
+            klient.objects.filter(IdKlienta=LatestData).update(NazwaModulu=modelform)
+
+            return render(request, 'TypKlienta/kalkulacjacenowa.html',{'SugerowanaMoc': y,'LiczbaModulow': LiczbaModulow,'WartoscModulow': WartoscModulow, 'modelform': modelform,'form': ModulyForm(),'form2':form2 })
+    return  render(request, 'TypKlienta/kalkulacjacenowa.html' ,{'form': ModulyForm(),'SugerowanaMoc': y })
 
 
-            return render(request, 'TypKlienta/kalkulacjacenowa.html',{'SugerowanaMoc': y,'LiczbaModulow': LiczbaModulow, 'modelform': modelform,'form': ModulyForm() })
-    return  render(request, 'TypKlienta/kalkulacjacenowa.html', {'form': ModulyForm(),'SugerowanaMoc': y })
+def KalkulacjaFalownika(request):
+    y= klient.objects.last().WymaganaMoc
+    LiczbaModulowStr = klient.objects.last().LiczbaModulow
+    NazwaModuluStr = klient.objects.last().NazwaModulu
+
+    if request.method == 'POST':
+        form=FalownikiForm(request.POST)
+        form2 = request.POST['IloscFalownikow']
+
+        if form.is_valid():
+           print("")
+        else:
+            modelform= form["Model"].value()
+            intform2= str(form2)
+            if intform2 =="":
+                intform2 = 0
+
+            CenaFalownika = Falowniki.objects.get(model=modelform).cenanetto
+            obliczenie1 = PriceCalculationFalowniki(modelform,intform2,CenaFalownika)
+            WartoscFalownikow = obliczenie1.count_PriceCalculationFalowniki()
+
+            LatestData = klient.objects.latest("data").IdKlienta
+            klient.objects.filter(IdKlienta=LatestData).update(LiczbaFalownikow=intform2)
+            klient.objects.filter(IdKlienta=LatestData).update(WartoscFalownikow=WartoscFalownikow)
+            klient.objects.filter(IdKlienta=LatestData).update(NazwaFalownika=modelform)
+
+            return render(request, 'TypKlienta/kalkulacjafalownika.html',{'SugerowanaMoc': y,'LiczbaModulowStr': LiczbaModulowStr,'NazwaModuluStr': NazwaModuluStr,'WartoscFalownikow': WartoscFalownikow, 'modelform': modelform,'form': FalownikiForm(),'form2':form2 })
+    return  render(request, 'TypKlienta/kalkulacjafalownika.html' ,{'form': FalownikiForm(),'SugerowanaMoc': y,'LiczbaModulowStr': LiczbaModulowStr,'NazwaModuluStr': NazwaModuluStr })
+
 
 
 

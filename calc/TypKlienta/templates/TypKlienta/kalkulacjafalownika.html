@@ -9,6 +9,8 @@
 
 {% block content %}
 <h3>Sugerowana moc instalacji wynosi: {{SugerowanaMoc}} kWp</h3>
+<h3>Nazwa modułu : {{NazwaModuluStr}} </h3>
+<h3>Liczba modułów: {{LiczbaModulowStr}} </h3>
 
 <br>
 <br>
@@ -18,14 +20,14 @@
         {{ form }}
     <br><br>
 
-  <label for="dodatkowaliczba">Wpisz dodatkową ilość modułów:</label>
-  <input type="number" id="dodatkowaliczba" name="dodatkowaliczba"><br><br>
+  <label for="IloscFalownikow">Wpisz liczbę falowników:</label>
+  <input type="number" id="IloscFalownikow" name="IloscFalownikow"><br><br>
 
     <button type="submit" value="oblicz" class="btn btn-primary">Oblicz</button>
 
 </form>
-        <p>Liczba modułów: {{ LiczbaModulow }}  </p>
-        <p>Dodatkowa liczba modułów: {{ form2 }}  </p>
+        <p>wartość: {{ WartoscKalownikow }}  </p>
+        <p>Wybrano falownik:: {{ modelform }}  </p>
 
 </div>
  <br><br>

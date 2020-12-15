@@ -34,6 +34,7 @@ class Migration(migrations.Migration):
                 ('metraz', models.IntegerField()),
                 ('zuzycie', models.IntegerField()),
                 ('typ', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='TypKlienta.typklienta', to_field='nazwa')),
+
             ],
             options={
                 'verbose_name': 'Klient',
