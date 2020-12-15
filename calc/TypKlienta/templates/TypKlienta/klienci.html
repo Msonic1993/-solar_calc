@@ -46,10 +46,10 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
 
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
-
+<div class="table-responsive">
   <table id="CustomerTable" class="table table-bordered">
-    <thead>
-      <tr>
+     <thead class="thead">
+      <tr class="table-warning">
         <th onclick="sortTable(0)">Imię</th>
        <th onclick="sortTable(0)">Nazwisko</th>
         <th>Ulica</th>
@@ -87,7 +87,7 @@
       {% endfor %}
     </tbody>
   </table>
-
+</div>
 
 
 {% endblock %}
