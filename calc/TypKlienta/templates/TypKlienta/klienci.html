@@ -6,6 +6,7 @@
 {% load widget_tweaks %}
 
 {% block content %}
+
   <form method="get">
     <div class="well">
       <h4 style="margin-top: 0">Filter</h4>
@@ -42,11 +43,15 @@
 
     </button>
 </form>
-  <table class="table table-bordered">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+
+  <table id="CustomerTable" class="table table-bordered">
     <thead>
       <tr>
-        <th>Imię</th>
-        <th>Nazwisko</th>
+        <th onclick="sortTable(0)">Imię</th>
+       <th onclick="sortTable(0)">Nazwisko</th>
         <th>Ulica</th>
         <th>Miasto</th>
         <th>Telefon</th>
@@ -82,4 +87,7 @@
       {% endfor %}
     </tbody>
   </table>
+
+
+
 {% endblock %}
