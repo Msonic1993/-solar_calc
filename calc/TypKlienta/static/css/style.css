@@ -1,3 +1,21 @@
+.containerLoginAsk {
+  height: 200px;
+  position: relative;
+  border: 3px solid green;
+}
+
+.vertical-centerLoginAsk {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+.title_client {
+color: blue;
+    margin-left: 2%;
+}
+
 .navbar-default {
   background-color: #6b6a6b;
   border-color: #4644ad;
@@ -66,9 +84,4 @@
     color: #ecdbff;
     background-color: #4644ad;
   }
-}
-
-.title_client {
-color: blue;
-    margin-left: 2%;
 }

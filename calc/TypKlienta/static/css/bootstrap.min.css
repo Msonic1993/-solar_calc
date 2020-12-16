@@ -8032,4 +8032,22 @@ button.close {
 		display: none!important
 	}
 }
+
+.containerLoginAsk {
+  height: 200px;
+  position: relative;
+
+}
+
+.vertical-centerLoginAsk {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+
+}
+.title_client {
+color: blue;
+    margin-left: 2%;
+}
 /*# sourceMappingURL=bootstrap.min.css.map */

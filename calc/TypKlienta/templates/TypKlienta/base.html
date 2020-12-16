@@ -7,7 +7,10 @@
 
 <html lang="pl">
  <head>
-     <script src="jquery-1.12.0.min.js"></script>
+     <style>img {
+  opacity: 0.5;
+}</style>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
       <script src = " {% static 'js/tablesort.js' %}"> </script>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -18,10 +21,17 @@
     <link rel="stylesheet" href=" {% static 'css/style.css' %}"/>
      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+     <link rel="stylesheet" type="text/css" href="static/css/style.css">
+     <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
     <title>Hello, world!</title>
 
   </head>
-  <body>
+  <body style="background-image: url();
+    background-color: #007eff0a;
+    background-repeat: no-repeat;
+    position: relative;
+    background-size: cover;
+    background-position: center;">
     <div class="page-header">
 
           {% if user.is_authenticated %}
@@ -40,13 +50,18 @@
     </div>
 
 </head>
-<body>
+
 
           {% if user.is_authenticated %}
                 {% block content %}
                 {% endblock %}
            {% else %}
-                <p> <a href="/login">Kliknij tutaj by się zalogować.</a> </p>
+            <div class="containerLoginAsk">
+                <h1><center>Witaj!</center></h1>
+            <div class="vertical-centerLoginAsk">
+                <a href="/login"><button type="button" class="btn btn-primary btn-lg btn-block">Kliknij tutaj by się zalogować.                      </button></a>
+            </div>
+            </div>
             {% endif %}
 <div>
 
