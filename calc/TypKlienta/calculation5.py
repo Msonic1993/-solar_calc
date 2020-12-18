@@ -3,7 +3,7 @@ from decimal import Decimal
 
 class PriceCalculationSystemmontazowy():
 
-
+#1
 
     def __init__(self,modelform,yy,CenaSystemuMontazowego):
 
