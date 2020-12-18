@@ -11,7 +11,7 @@ class PowerComsumption():
         self.kadnachylenia = kadnachylenia
         self.przelicznik = przelicznik
         self.ekspozycja = ekspozycja
-        self.mnoznik = mnoznik
+        self.mnoznik = float(mnoznik)
 
         if kadnachylenia:
 
@@ -20,7 +20,7 @@ class PowerComsumption():
             self.wynik = zuzycie
 
         if ekspozycja:
-            self.wynik = self.wynik *  mnoznik * 1.2
+            self.wynik = float(self.wynik) *  float(mnoznik) * 1.2
         else:
             self.wynik = zuzycie
 

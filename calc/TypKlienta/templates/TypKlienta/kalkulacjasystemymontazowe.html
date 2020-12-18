@@ -19,23 +19,20 @@
 <br>
 <div>
 <form method=POST action="">
+    <p> >Wybierz system montazowy z listy rozwijanej:</p>
     {% csrf_token %}
         {{ form }}
     <br><br>
-
-  <label for="IloscOptymalizatorow">Wpisz liczbę optymalizatorów (jeśli brak pozostaw puste):</label>
-  <input type="number" id="IloscOptymalizatorow" name="IloscOptymalizatorow"><br><br>
-
     <button type="submit" value="oblicz" class="btn btn-primary">Oblicz</button>
 
 </form>
-        <p>wartość: {{ WartoscOptymalizatorow }}  </p>
-        <p>Wybrano Optymalizator: {{ modelform }}  </p>
+        <p>wartość: {{ WartoscsystemuMontazowego }}  </p>
+        <p>Wybrano: {{ modelform }}  </p>
 
 </div>
  <br><br>
 <div>
-     <a href="kalkulacjasystemymontazowe"> <button type="submit" class="btn btn-info">Przejdz do nastepnego kroku</button></a>
+     <a href=""> <button type="submit" class="btn btn-info">Przejdz do nastepnego kroku</button></a>
 </div>
 
 {% endblock %}

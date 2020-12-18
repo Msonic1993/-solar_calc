@@ -1,4 +1,4 @@
-from TypKlienta.models import klient,Moduly,Falowniki,Optymalizatory
+from TypKlienta.models import klient,Moduly,Falowniki,Optymalizatory,Systemmontazowy
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
@@ -39,5 +39,13 @@ class OptymalizatoryForm(forms.Form):
 
     Model = forms.ModelChoiceField(
         queryset=Optymalizatory.objects.values_list("model", flat=True).distinct(),
-        empty_label="brak"
+        empty_label=""
+    )
+
+
+class SystemMontazowyForm(forms.Form):
+
+    Model = forms.ModelChoiceField(
+        queryset=Systemmontazowy.objects.values_list("nazwa", flat=True).distinct(),
+        empty_label=""
     )

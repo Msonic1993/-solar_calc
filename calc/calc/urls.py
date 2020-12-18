@@ -17,7 +17,7 @@ from TypKlienta import views
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
-from TypKlienta.views import index,register, KalkulacjaCenowa,KalkulacjaFalownika,KalkulacjaOptymalizatory
+from TypKlienta.views import index,register, KalkulacjaCenowa,KalkulacjaFalownika,KalkulacjaOptymalizatory,KalkulacjaSystemMontazowy
 from TypKlienta.views import klienciListView
 from django_filters.views import FilterView
 from TypKlienta.filters import KlientFilter
@@ -31,6 +31,7 @@ urlpatterns = [
     path("kalkulacjacenowa/", KalkulacjaCenowa, name='kalkulacjacenowa'),
     path("kalkulacjafalownika/", KalkulacjaFalownika, name='kalkulacjafalownika'),
     path("kalkulacjaoptymaliztorymocy/", KalkulacjaOptymalizatory, name='kalkulacjaoptymaliztorymocy'),
+    path("kalkulacjasystemymontazowe/", KalkulacjaSystemMontazowy, name='kalkulacjasystemymontazowe'),
     path('register/',LoginView.as_view(template_name='TypKlienta/login.html'),name="login"),
     path('login/',LoginView.as_view(template_name='TypKlienta/login.html'),name="login"),
     path('logout/',  LogoutView.as_view(template_name='TypKlienta/logout.html'), name="login"),

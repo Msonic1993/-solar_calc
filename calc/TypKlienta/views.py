@@ -16,11 +16,12 @@ from django.http import JsonResponse
 from .calculation2 import PriceCalculation
 from .calculation3 import PriceCalculationFalowniki
 from .calculation4 import PriceCalculationOptymalizatory
-from .forms import SignUpForm, OptymalizatoryForm
+from .calculation5 import PriceCalculationSystemmontazowy
+from .forms import SignUpForm, OptymalizatoryForm, SystemMontazowyForm
 from .calculation import PowerComsumption
 from .filters import KlientFilter
 from .forms import DodajKlienta,ModulyForm,FalownikiForm
-from .models import TypKlienta, Vat, klient, KadNachyleniaDachu, WymaganaMocInstalacji, EkspozycjaDachowa, Moduly,Falowniki,Optymalizatory
+from .models import TypKlienta, Vat, klient, KadNachyleniaDachu, WymaganaMocInstalacji, EkspozycjaDachowa, Moduly,Falowniki,Optymalizatory,Systemmontazowy
 from .tables import KlientTable
 from django_tables2.views import SingleTableMixin
 from django.shortcuts import render
@@ -87,6 +88,7 @@ def KalkulacjaCenowa(request):
             LiczbaModulow = obliczenie1.count_PriceCalculation()[0]
             WartoscModulow= obliczenie1.count_PriceCalculation()[1]
             LatestData = klient.objects.latest("data").IdKlienta
+            klient.objects.filter(IdKlienta=LatestData).update(KamId_id=request.user)
             klient.objects.filter(IdKlienta=LatestData).update(LiczbaModulow=LiczbaModulow)
             klient.objects.filter(IdKlienta=LatestData).update(WartoscModulow=WartoscModulow)
             klient.objects.filter(IdKlienta=LatestData).update(NazwaModulu=modelform)
@@ -148,13 +150,44 @@ def KalkulacjaOptymalizatory(request):
             obliczenie1 = PriceCalculationOptymalizatory(modelform,intform2,CenaOptymalizatora)
             WartoscOptymalizatorow = obliczenie1.count_PriceCalculationOptymalizatory()
 
-            # LatestData = klient.objects.latest("data").IdKlienta
-            # klient.objects.filter(IdKlienta=LatestData).update(LiczbaFalownikow=intform2)
-            # klient.objects.filter(IdKlienta=LatestData).update(WartoscFalownikow=WartoscFalownikow)
-            # klient.objects.filter(IdKlienta=LatestData).update(NazwaFalownika=modelform)
+            LatestData = klient.objects.latest("data").IdKlienta
+            klient.objects.filter(IdKlienta=LatestData).update(LiczbaOptymalizatorow=intform2)
+            klient.objects.filter(IdKlienta=LatestData).update(WartoscOptymalizatorow=WartoscOptymalizatorow)
+            klient.objects.filter(IdKlienta=LatestData).update(NazwaOptymalizatora=modelform)
 
             return render(request, 'TypKlienta/kalkulacjaoptymaliztorymocy.html',{'SugerowanaMoc': y,'LiczbaModulowStr': LiczbaModulowStr,'NazwaModuluStr': NazwaModuluStr,'WartoscOptymalizatorow': WartoscOptymalizatorow,'LiczbaFalownikowStr': LiczbaFalownikowStr,'NazwaFalownikaStr': NazwaFalownikaStr ,'modelform': modelform,'form': OptymalizatoryForm(),'form2':form2 })
     return  render(request, 'TypKlienta/kalkulacjaoptymaliztorymocy.html' ,{'form': OptymalizatoryForm(),'SugerowanaMoc': y,'LiczbaModulowStr': LiczbaModulowStr,'NazwaModuluStr': NazwaModuluStr,'LiczbaFalownikowStr': LiczbaFalownikowStr,'NazwaFalownikaStr': NazwaFalownikaStr })
+
+
+def KalkulacjaSystemMontazowy(request):
+    y= klient.objects.last().WymaganaMoc
+    yy=float(str(y))
+    LiczbaModulowStr = klient.objects.last().LiczbaModulow
+    NazwaModuluStr = klient.objects.last().NazwaModulu
+    LiczbaFalownikowStr = klient.objects.last().LiczbaFalownikow
+    NazwaFalownikaStr = klient.objects.last().NazwaFalownika
+
+
+    if request.method == 'POST':
+        form=SystemMontazowyForm(request.POST)
+
+
+        if form.is_valid():
+           print("")
+        else:
+            modelform = form["Model"].value()
+
+            CenaSystemuMontazowego = Systemmontazowy.objects.get(nazwa=modelform).cenanetto
+            obliczenie1 = PriceCalculationSystemmontazowy(modelform, yy,CenaSystemuMontazowego)
+            WartoscsystemuMontazowego = obliczenie1.count_PriceCalculationSystemmontazowy()
+
+            # LatestData = klient.objects.latest("data").IdKlienta
+            # klient.objects.filter(IdKlienta=LatestData).update(LiczbaOptymalizatorow=intform2)
+            # klient.objects.filter(IdKlienta=LatestData).update(WartoscOptymalizatorow=WartoscsystemuMontazowego)
+            # klient.objects.filter(IdKlienta=LatestData).update(NazwaOptymalizatora=modelform)
+
+            return render(request, 'TypKlienta/kalkulacjasystemymontazowe.html',{'SugerowanaMoc': y,'LiczbaModulowStr': LiczbaModulowStr,'NazwaModuluStr': NazwaModuluStr,'WartoscsystemuMontazowego': WartoscsystemuMontazowego,'LiczbaFalownikowStr': LiczbaFalownikowStr,'NazwaFalownikaStr': NazwaFalownikaStr ,'modelform': modelform,'form': SystemMontazowyForm()})
+    return  render(request, 'TypKlienta/kalkulacjasystemymontazowe.html' ,{'form': SystemMontazowyForm(),'SugerowanaMoc': y,'LiczbaModulowStr': LiczbaModulowStr,'NazwaModuluStr': NazwaModuluStr,'LiczbaFalownikowStr': LiczbaFalownikowStr,'NazwaFalownikaStr': NazwaFalownikaStr })
 
 
 

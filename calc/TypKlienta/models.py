@@ -94,7 +94,7 @@ class Optymalizatory(BaseModel):
         verbose_name = "Optymalizatory"
         verbose_name_plural = "Optymalizatory"
 
-class Systemumontazowe(BaseModel):
+class Systemmontazowy(BaseModel):
     def __str__(self):
         return self.nazwa
 
@@ -167,6 +167,9 @@ class klient(BaseModel):
     NazwaFalownika = models.CharField(max_length=100, null=True)
     LiczbaFalownikow = models.IntegerField( null=True)
     WartoscFalownikow = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+    NazwaOptymalizatora = models.CharField(max_length=100, null=True)
+    LiczbaOptymalizatorow = models.IntegerField(null=True)
+    WartoscOptymalizatorow = models.DecimalField(max_digits=100, decimal_places=2, null=True)
     KamId = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
 
