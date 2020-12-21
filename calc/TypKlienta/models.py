@@ -170,6 +170,18 @@ class klient(BaseModel):
     NazwaOptymalizatora = models.CharField(max_length=100, null=True)
     LiczbaOptymalizatorow = models.IntegerField(null=True)
     WartoscOptymalizatorow = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+    NazwaSystemuMontazowego = models.CharField(max_length=100, null=True)
+    WartoscSystemuMontazowego = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+    IloscSkrzynekAC = models.IntegerField(null=True)
+    WartoscSkrzynekAC = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+    WartoscOkablowaniaAC = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+    IloscStringow = models.IntegerField(null=True)
+    WartoscStringow = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+    WartoscOkablowaniaDC = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+    KosztTransportu = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+    KosztMontazu = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+
+
     KamId = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
 

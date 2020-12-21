@@ -13,30 +13,27 @@
 <h3>Liczba modułów: {{LiczbaModulowStr}} </h3>
 <h3>Nazwa falownika : {{NazwaFalownikaStr}} </h3>
 <h3>Liczba falowników: {{LiczbaFalownikowStr}} </h3>
+<h3>Nazwa optymalizatora mocy : {{NazwaOptyalizatorowStr}} </h3>
+<h3>Liczba optymalizoatorów mocy: {{LiczbaOptyalizatorowStr}} </h3>
 
-
-
-<br>
 <br>
 <div>
 <form method=POST action="">
+    <p> Wpisz ilość skrzynek AC:</p>
     {% csrf_token %}
         {{ form }}
     <br><br>
-
-  <label for="IloscOptymalizatorow">Wpisz liczbę optymalizatorów (jeśli brak pozostaw puste):</label>
-  <input type="number" id="IloscOptymalizatorow" name="IloscOptymalizatorow"><br><br>
-
     <button type="submit" value="oblicz" class="btn btn-primary">Oblicz</button>
 
 </form>
-        <p>wartość: {{ WartoscOptymalizatorow }}  </p>
-        <p>Wybrano Optymalizator: {{ modelform }}  </p>
+        <p>wartość: {{ WartoscSkrzynekAC }}  </p>
+        <p>wartość transport: {{ KosztMontazu }}  </p>
+        <p>Wybrano: {{ modelform }} szt. </p>
 
 </div>
  <br><br>
 <div>
-     <a href="\kalkulacjasystemymontazowe"> <button type="submit" class="btn btn-info">Przejdz do nastepnego kroku</button></a>
+     <a href="/kalkulacjaliczbastringow"> <button type="submit" class="btn btn-info">Przejdz do nastepnego kroku</button></a>
 </div>
 
 {% endblock %}
