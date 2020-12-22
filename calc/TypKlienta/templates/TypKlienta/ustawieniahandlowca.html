@@ -1,0 +1,34 @@
+{% extends 'TypKlienta/base.html' %}
+{% load sitetree %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+{% load myTags %}
+
+{% block title %}Ustawienia handlowca{% endblock %}
+
+{% block content %}
+
+<h4>Witaj {{{{user}}}} </h4>
+<h4>Twoja indywidualna marża obecnie wynosi:  {{NazwaSystemuMontazowegoStr}} </h4>
+<br>
+<div>
+
+
+<form method=POST action="">
+    <p> </p>
+    {% csrf_token %}
+        {{ form }}
+    <br><br>
+    <button type="submit" value="oblicz" class="btn btn-primary">Zatwierdź</button>
+
+</form>
+        <p>Wybrano :<strong> {{modelform}}</strong> </p>
+
+</div>
+ <br><br>
+<div>
+     <a href=""> <button type="submit" class="btn btn-info">Przejdz do nastepnego kroku</button></a>
+</div>
+
+{% endblock %}

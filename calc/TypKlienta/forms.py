@@ -70,14 +70,30 @@ LICZBA_CHOICES = [
 class LiczbaStringowForm(forms.Form):
     LiczbaStringow = forms.ChoiceField(choices=LICZBA_CHOICES,label="Liczba stringów ")
 
-PRACE_GRUNTOWE_CHOICES = [
+
+
+ELEMENTY_DODATKOWE_CHOICES = [
     ('NIE', 'NIE'),
     ('TAK', 'TAK'),
 
 ]
-class PraceGrunoweForm(forms.Form):
-    CzyPraceGruntowe = forms.ChoiceField(choices=PRACE_GRUNTOWE_CHOICES,label="Wybierz TAK lub NIE")
+class ElementyDodatkoweForm(forms.Form):
+    Zwyszka = forms.ChoiceField(choices=ELEMENTY_DODATKOWE_CHOICES,label="Zwyszka ")
+    WiFiExtender = forms.ChoiceField(choices=ELEMENTY_DODATKOWE_CHOICES,label="WiFi Extender ")
 
-    if CzyPraceGruntowe =="TAK":
-        IloscM2 = forms.IntegerField(label='Wpisz ilosc m2')
 
+PPOZ_CHOICES = [
+    ('NIE', 'NIE'),
+    ('TAK', 'TAK'),
+
+]
+class PPOZForm(forms.Form):
+
+    KlientPPOZ = klient.objects.last().WymaganaMoc
+    KlientPPOZFloat = float(str(KlientPPOZ))
+
+    if KlientPPOZFloat > 6500:
+         ObowiazkowePPOZ = forms.CharField(label='',
+                    widget=forms.TextInput(attrs={'placeholder': 'Instalacja pow. 6,5 kW. Zabezpieczenie PPOŻ jest obowiązkowe', 'readonly':'readonly','size':55, 'maxlength':30},))
+    else:
+        ObowiazkowePPOZ = forms.ChoiceField(choices=PPOZ_CHOICES, label="Zabezpieczenie PPOŻ ")

@@ -126,6 +126,29 @@ class  WymaganaMocInstalacji(BaseModel):
     WymaganaMoc = models.DecimalField(max_digits=100, decimal_places=2, null=True)
 
 
+class  MarzaFirmy(BaseModel):
+    def __str__(self):
+        return str(self.Marza)
+
+    Marza = models.CharField(max_length=100)
+    WartoscMarzy = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+
+    class Meta:
+        verbose_name = "Marża firmy"
+        verbose_name_plural = "Marża firmy"
+
+class  MarzaHandlowca(BaseModel):
+    def __str__(self):
+        return str(self.Marza)
+    KamId = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    Marza = models.CharField(max_length=100)
+    WartoscMarzy = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+
+    class Meta:
+        verbose_name = "Marża handlowca"
+        verbose_name_plural = "Marża handlowca"
+
+
 class TypKlienta(BaseModel):
 
     def __str__(self):
@@ -180,11 +203,15 @@ class klient(BaseModel):
     WartoscOkablowaniaDC = models.DecimalField(max_digits=100, decimal_places=2, null=True)
     KosztTransportu = models.DecimalField(max_digits=100, decimal_places=2, null=True)
     KosztMontazu = models.DecimalField(max_digits=100, decimal_places=2, null=True)
-
+    IloscPracGruntowych = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+    KosztPracGruntowych = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+    Zwyszka = models.CharField(max_length=3, null=True)
+    KosztZwyszka =  models.DecimalField(max_digits=100, decimal_places=2, null=True)
+    WiFiExtender = models.CharField(max_length=3, null=True)
+    KosztWiFiExtender = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+    KosztPPOZ = models.DecimalField(max_digits=100, decimal_places=2, null=True)
 
     KamId = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-
-
 
     class Meta:
         verbose_name = "Klient"

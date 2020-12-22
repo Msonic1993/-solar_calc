@@ -1,0 +1,39 @@
+{% extends 'TypKlienta/base.html' %}
+{% load sitetree %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+{% load myTags %}
+
+{% block title %}Kalkulacja cenowa{% endblock %}
+
+{% block content %}
+<h4>Sugerowana moc instalacji wynosi: {{SugerowanaMoc}} kWp</h4>
+<h4>Nazwa modułu : {{NazwaModuluStr}} </h4>
+<h4>Liczba modułów: {{LiczbaModulowStr}} </h4>
+<h4>Nazwa falownika : {{NazwaFalownikaStr}} </h4>
+<h4>Liczba falowników: {{LiczbaFalownikowStr}} </h4>
+<h4>Nazwa optymalizatora mocy : {{NazwaOptyalizatorowStr}} </h4>
+<h4>Liczba optymalizoatorów mocy: {{LiczbaOptyalizatorowStr}} </h4>
+<h4>Nazwa systemu montażowego: {{NazwaSystemuMontazowegoStr}} </h4>
+
+<br>
+<div>
+<form method=POST action="">
+    <p> Elementy dodatkowe instalacji.</p>
+    {% csrf_token %}
+        {{ form }}
+    <br><br>
+    <button type="submit" value="oblicz" class="btn btn-primary">Oblicz</button>
+
+</form>
+        <p>Wybrano Zwyszka: <strong>{{ modelform1 }}</strong>  </p>
+        <p>Wybrano WiFi Extender:<strong> {{ modelform2 }}</strong> </p>
+
+</div>
+ <br><br>
+<div>
+     <a href="/kalkulacjappoz"> <button type="submit" class="btn btn-info">Przejdz do nastepnego kroku</button></a>
+</div>
+
+{% endblock %}

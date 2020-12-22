@@ -17,13 +17,12 @@ from TypKlienta import views
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
-from TypKlienta.views import index,register, KalkulacjaCenowa,KalkulacjaFalownika,KalkulacjaOptymalizatory,KalkulacjaSystemMontazowy,KalkulacjaSkrzynkiAC,KalkulacjaLiczbaStringow,KalkulacjaPraceGruntowe
+from TypKlienta.views import index,register, KalkulacjaCenowa,KalkulacjaFalownika,KalkulacjaOptymalizatory,KalkulacjaSystemMontazowy,KalkulacjaSkrzynkiAC,KalkulacjaLiczbaStringow,KalkulacjaPraceGruntowe,KalkulacjaElementyDodatkowe,KalkulacjaPPOZ
 from TypKlienta.views import klienciListView
 from django_filters.views import FilterView
 from TypKlienta.filters import KlientFilter
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.views import LoginView, LogoutView
-
 
 
 urlpatterns = [
@@ -37,6 +36,8 @@ urlpatterns = [
     path("kalkulacjaskrzynkiac/", KalkulacjaSkrzynkiAC, name='kalkulacjaskrzynkiac'),
     path("kalkulacjaliczbastringow/", KalkulacjaLiczbaStringow, name='kalkulacjaliczbastringow'),
     path("kalkulacjapracegruntowe/", KalkulacjaPraceGruntowe, name='kalkulacjapracegruntowe'),
+    path("kalkulacjaelementydodatkowe/", KalkulacjaElementyDodatkowe, name='kalkulacjaelementydodatkowe'),
+    path("kalkulacjappoz/", KalkulacjaPPOZ, name='kalkulacjappoz'),
     path('register/',LoginView.as_view(template_name='TypKlienta/login.html'),name="login"),
     path('login/',LoginView.as_view(template_name='TypKlienta/login.html'),name="login"),
     path('logout/',  LogoutView.as_view(template_name='TypKlienta/logout.html'), name="login"),
