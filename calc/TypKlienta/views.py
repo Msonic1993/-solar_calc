@@ -1,5 +1,5 @@
 from decimal import Decimal
-
+from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, request
@@ -70,8 +70,18 @@ def index(request):
 def klienciListView(request):
     user_list = klient.objects.all()
     user_filter = KlientFilter(request.GET, queryset=user_list)
-    return render(request, 'TypKlienta/klienci.html', {'filter': user_filter})
 
+    if (request.GET.get('DeleteButton')):
+        klient.objects.filter(pk=request.GET.get('DeleteButton')).delete()
+
+
+    return render(request, 'TypKlienta/klienci.html', {'filter': user_filter,'form': form() })
+
+def post_remove(request, pk):
+
+    post = get_object_or_404(klient, pk=pk)
+    post.delete()
+    return HttpResponseRedirect('/klienci/')
 
 def KalkulacjaCenowa(request):
     y = klient.objects.last().WymaganaMoc

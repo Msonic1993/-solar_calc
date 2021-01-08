@@ -41,7 +41,6 @@
 <form action="/klienci/">
  <button type="submit" class="btn btn-info">Resetuj filtr</button>
 
-    </button>
 </form>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
 
@@ -76,7 +75,7 @@
           <td>{{ klient.zuzycie }}</td>
           <td>{{ klient.WymaganaMoc }}</td>
           <td>{{ klient.KamId }}</td>
-
+            <td><button type="button" class="btn btn-danger">Usuń klienta <a class="btn" href="{% url 'post_remove' pk=klient.pk %}"><span class="glyphicon glyphicon-remove"></span></a></button></td>
 
 
         </tr>

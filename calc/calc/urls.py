@@ -42,4 +42,6 @@ urlpatterns = [
     path('login/',LoginView.as_view(template_name='TypKlienta/login.html'),name="login"),
     path('logout/',  LogoutView.as_view(template_name='TypKlienta/logout.html'), name="login"),
     path('', include("django.contrib.auth.urls")),
+    url(r'^task/(?P<pk>\d+)/remove/$', views.post_remove, name='post_remove'),
+
 ]
