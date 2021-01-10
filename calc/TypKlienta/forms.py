@@ -1,16 +1,28 @@
 from .models import klient,Moduly,Falowniki,Optymalizatory,Systemmontazowy
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.forms import ModelForm
+from django.forms import ModelForm, Textarea
 from django import forms
 
 
 
 class DodajKlienta(ModelForm):
+
     class Meta:
         model = klient
         fields = ("typ","imie", "nazwisko", "ulica", "miasto", "telefon", "metraz","ekspozycjaDachowa", "kadNachyleniaDachu","zuzycie")
-
+        labels = {
+            'typ': 'Typ klienta',
+            'imie': 'Imię klienta',
+            'nazwisko': 'Nazwisko klienta',
+            'ulica': 'Nazwa  i nr ulicy',
+            'miasto': 'Nazwa miasta',
+            'telefon': 'Telefon kontaktowy',
+            'metraz': 'Metraż budynku',
+            'ekspozycjaDachowa': 'Ekspozycja dachowa',
+            'kadNachyleniaDachu': 'Kąd nachylenia dachu',
+            'zuzycie': 'Zużycie roczne prądu',
+            }
 
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')

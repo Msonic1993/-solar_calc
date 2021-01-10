@@ -1,16 +1,18 @@
 from decimal import Decimal
 
+from TypKlienta.models import klient
+
 
 class PriceCalculationSkrzynkiAC():
-
+    MocInstalacji = klient.objects.last().MocInstalacji
     def __init__(self,modelform,yy):
         self.yy=yy
         self.modelform = modelform
 
         if modelform:
             self.WartoscSkrzynekAC = modelform*600
-            self.WartoscOkablowaniaAC = (Decimal(yy)* 50) / 1000
-            self.WartoscOkablowaniaDC = (Decimal(yy) * 90) / 1000
+            self.WartoscOkablowaniaAC = (self.MocInstalacji* 50)
+            self.WartoscOkablowaniaDC =  (self.MocInstalacji * 90)
         if yy < 10000.00:
             self.KosztTransportu = 400
         else:

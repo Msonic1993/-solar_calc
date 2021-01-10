@@ -1,0 +1,35 @@
+{% extends 'TypKlienta/base.html' %}
+{% load sitetree %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+{% load myTags %}
+{% block content %}
+
+    <h1>Kalkulacja systemu fotowoltaicznego - Kalkulacja mocy instalacji </h1>
+
+
+<div class="input_name">
+    <h3>Wpisz proszę dane o kliencie</h3>
+
+<div class="container">
+    <div class="row">
+    <div class="col">
+<form action="{% url 'index' %}" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <br>
+    <input type="submit" value="Zapisz klienta i oblicz">
+
+</form>
+    </div>
+<br>
+ <div class="col">
+
+     <a  href="/kalkulacjacenowa"> <button style="margin: 123px;" type="submit" class="btn btn-info">Przejdz do nastepnego kroku >></button></a>
+</div>
+
+</div>
+
+
+ {% endblock %}

@@ -1,19 +1,21 @@
 from decimal import Decimal
 
+from TypKlienta.models import klient
+
 
 class PriceCalculationSystemmontazowy():
 
-#1
 
-    def __init__(self,modelform,yy,CenaSystemuMontazowego):
+    MocInstalacji = klient.objects.last().MocInstalacji
+
+    def __init__(self,modelform,CenaSystemuMontazowego):
 
 
         self.modelform = modelform
         self.CenaSystemuMontazowego = Decimal(CenaSystemuMontazowego)
-        self.yy =  Decimal(yy)
 
         if modelform:
-            self.WartoscSystemuMontazowego = ( Decimal(yy) * Decimal(CenaSystemuMontazowego))/1000
+            self.WartoscSystemuMontazowego = ( self.MocInstalacji * Decimal(CenaSystemuMontazowego))
 
     def count_PriceCalculationSystemmontazowy(self):
         return self.WartoscSystemuMontazowego

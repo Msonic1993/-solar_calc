@@ -1,9 +1,17 @@
 .containerLoginAsk {
   height: 200px;
   position: relative;
-  border: 3px solid green;
-}
 
+}
+.navbar-inverse {
+    background-color: #428bca;
+    border-color: #ffffff;
+
+.page-header {
+    padding-bottom: 9px;
+    margin: 40px 0 20px;
+    border-bottom: 1px solid #eee0;
+}
 .vertical-centerLoginAsk {
   margin: 0;
   position: absolute;

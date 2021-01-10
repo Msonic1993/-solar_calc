@@ -20,5 +20,8 @@ class PriceZabezpieczeniePPOZ():
             self.KosztPPOZ = 0.00
 
 
+
+
+
     def count_PriceZabezpieczeniePPOZ(self):
         return self.KosztPPOZ

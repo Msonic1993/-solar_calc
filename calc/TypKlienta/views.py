@@ -16,6 +16,7 @@ from django.views.generic.edit import CreateView
 from django.http import JsonResponse
 
 from .calculation10 import PriceZabezpieczeniePPOZ
+from .calculation11 import PodsumowanieBezDotacjiCalc
 from .calculation2 import PriceCalculation
 from .calculation3 import PriceCalculationFalowniki
 from .calculation4 import PriceCalculationOptymalizatory
@@ -63,8 +64,14 @@ def index(request):
             klient.objects.filter(IdKlienta=GetId).update(WymaganaMoc_id=x)
             # klient.objects.filter(IdKlienta=GetId).update(field1='some value')
 
-            return render(request, 'TypKlienta/glowna.html', {'wynik': wynik})
-    return render(request, 'TypKlienta/glowna.html', {'form': DodajKlienta()})
+            return render(request, 'TypKlienta/rozpoczeciekalkulacji.html', {'wynik': wynik})
+    return render(request, 'TypKlienta/rozpoczeciekalkulacji.html', {'form': DodajKlienta()})
+
+def glowna(request):
+    if request.method == 'POST':
+
+            return render(request, 'TypKlienta/glowna.html', {})
+    return render(request, 'TypKlienta/glowna.html', {})
 
 
 def klienciListView(request):
@@ -105,11 +112,13 @@ def KalkulacjaCenowa(request):
             obliczenie1 = PriceCalculation(MocModulu, xx, modelform, Decimalform2, CenaModulu)
             LiczbaModulow = obliczenie1.count_PriceCalculation()[0]
             WartoscModulow = obliczenie1.count_PriceCalculation()[1]
+            MocInstalacji = obliczenie1.count_PriceCalculation()[2]
             LatestData = klient.objects.latest("data").IdKlienta
             klient.objects.filter(IdKlienta=LatestData).update(KamId_id=request.user)
             klient.objects.filter(IdKlienta=LatestData).update(LiczbaModulow=LiczbaModulow)
             klient.objects.filter(IdKlienta=LatestData).update(WartoscModulow=WartoscModulow)
             klient.objects.filter(IdKlienta=LatestData).update(NazwaModulu=modelform)
+            klient.objects.filter(IdKlienta=LatestData).update(MocInstalacji=MocInstalacji)
 
             return render(request, 'TypKlienta/kalkulacjacenowa.html',
                           {'SugerowanaMoc': y, 'LiczbaModulow': LiczbaModulow, 'WartoscModulow': WartoscModulow,
@@ -211,7 +220,7 @@ def KalkulacjaSystemMontazowy(request):
             modelform = form["Model"].value()
 
             CenaSystemuMontazowego = Systemmontazowy.objects.get(nazwa=modelform).cenanetto
-            obliczenie1 = PriceCalculationSystemmontazowy(modelform, yy, CenaSystemuMontazowego)
+            obliczenie1 = PriceCalculationSystemmontazowy(modelform, CenaSystemuMontazowego)
             WartoscSystemuMontazowego = obliczenie1.count_PriceCalculationSystemmontazowy()
 
             LatestData = klient.objects.latest("data").IdKlienta
@@ -477,6 +486,29 @@ def KalkulacjaPPOZ(request):
                                                                         'LiczbaOptyalizatorowStr': LiczbaOptyalizatorowStr,
                                                                         'NazwaOptyalizatorowStr': NazwaOptyalizatorowStr,
                                                                         'NazwaSystemuMontazowegoStr': NazwaSystemuMontazowegoStr})
+
+def PodsumowanieBezDotacji(request):
+
+    if 'tak_button' in request.POST:
+
+        modelform = "TAK"
+
+        obliczenie1 = PodsumowanieBezDotacjiCalc(modelform)
+        PodsumowanieWynik = obliczenie1.count_PodsumowanieBezDotacjiCalc()[0]
+        PodsumowanieWynikBrutto = obliczenie1.count_PodsumowanieBezDotacjiCalc()[1]
+
+
+        LatestData = klient.objects.latest("data").IdKlienta
+        klient.objects.filter(IdKlienta=LatestData).update(KosztInstalacjiNetto=PodsumowanieWynik)
+
+
+
+        return render(request, 'TypKlienta/podsumowaniebezdotacji.html', {
+                                                                        'PodsumowanieBezDotacji': PodsumowanieWynik,
+            'PodsumowanieBezDotacjiBrutto': PodsumowanieWynikBrutto
+                                                                     })
+    return render(request, 'TypKlienta/kalkulacjapytaniedotacje.html', {
+                                                                        })
 
 
 

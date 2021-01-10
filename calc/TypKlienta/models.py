@@ -186,6 +186,7 @@ class klient(BaseModel):
     WymaganaMoc = models.ForeignKey(WymaganaMocInstalacji, null=True, on_delete=models.CASCADE)
     LiczbaModulow = models.DecimalField(max_digits=100, decimal_places=2, null=True)
     NazwaModulu = models.CharField(max_length=100,null=True)
+    MocInstalacji = models.DecimalField(max_digits=100, decimal_places=2, null=True)
     WartoscModulow = models.DecimalField(max_digits=100, decimal_places=2, null=True)
     NazwaFalownika = models.CharField(max_length=100, null=True)
     LiczbaFalownikow = models.IntegerField( null=True)
@@ -210,7 +211,8 @@ class klient(BaseModel):
     WiFiExtender = models.CharField(max_length=3, null=True)
     KosztWiFiExtender = models.DecimalField(max_digits=100, decimal_places=2, null=True)
     KosztPPOZ = models.DecimalField(max_digits=100, decimal_places=2, null=True)
-
+    KosztInstalacjiNetto = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+    KosztInstalacjiBrutto = models.DecimalField(max_digits=100, decimal_places=2, null=True)
     KamId = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
     class Meta:

@@ -1,0 +1,28 @@
+{% extends 'TypKlienta/base.html' %}
+{% load sitetree %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+{% load myTags %}
+
+{% block title %}Kalkulacja cenowa{% endblock %}
+
+{% block content %}
+
+
+<br>
+<div>
+<form method=POST action="">
+    <p> Czy chcesz obliczyć dotacje rządowe ?</p>
+    {% csrf_token %}
+
+    <br><br>
+    <button type="submit" name = "tak_button" value="TAK" class="btn btn-primary">TAK</button>
+     <br><br>
+    <button type="submit" value="NIE" class="btn btn-primary">NIE</button>
+
+</form>
+</div>
+
+
+{% endblock %}

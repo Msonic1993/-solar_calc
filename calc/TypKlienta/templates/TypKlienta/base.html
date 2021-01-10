@@ -18,16 +18,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href=" {% static 'css/style.css' %}"/>
      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
      <link rel="stylesheet" type="text/css" href="static/css/style.css">
      <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
-    <title>Hello, world!</title>
+    <title>Aplikacja</title>
 
   </head>
-  <body style="background-image: url();
+  <body style="background-image: url(static/bg.jpg);
     background-color: #007eff0a;
     background-repeat: no-repeat;
     position: relative;
@@ -35,14 +36,17 @@
     background-position: center;">
     <div class="page-header">
 
-          {% if user.is_authenticated %}
 
-               <p>jesteś zalogowany jako : {{user}} <a href="/logout"> Wyloguj się</a> </p>
+        {% sitetree_menu from "main_menu" include "trunk, topmenu"%}
+
+        <br><br>
+           {% if user.is_authenticated %}
+
+               <p> Jesteś zalogowany jako : {{user}} <button type="button" class="btn btn-default dropdown-toggle"><a href="/logout"> Wyloguj się</a></button> </p>
            {% else %}
                 <p> Niezalogowany </p>
             {% endif %}
-        {% sitetree_menu from "main_menu" include "trunk, topmenu"%}
-        <h1><a href="">Django </a></h1>
+
     </div>
     <div class="container" style="width:100%">
 
@@ -58,7 +62,7 @@
                 {% endblock %}
            {% else %}
             <div class="containerLoginAsk">
-                <h1><center>Witaj!</center></h1>
+                <h1><center>Witamy!</center></h1>
             <div class="vertical-centerLoginAsk">
                 <a href="/login"><button type="button" class="btn btn-primary btn-lg btn-block">Kliknij tutaj by się zalogować.                      </button></a>
             </div>

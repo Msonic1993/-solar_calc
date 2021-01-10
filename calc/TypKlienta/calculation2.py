@@ -16,7 +16,8 @@ class PriceCalculation():
 
         if modelform:
             self.LiczbaModulow =(Decimal(xx)/ MocModulu/1000) + Decimal(Decimalform2)
+            self.MocInstalacji = self.LiczbaModulow * self.MocModulu
             self.WartoscModulow =  self.LiczbaModulow * CenaModulu
 
     def count_PriceCalculation(self):
-        return round(self.LiczbaModulow) , round(self.WartoscModulow,2)
+        return round(self.LiczbaModulow) , round(self.WartoscModulow,2), round( self.MocInstalacji,2)
