@@ -12,16 +12,21 @@
 
 <br>
 <div>
-<form method=POST action="">
     <p> Czy chcesz obliczyć dotacje rządowe ?</p>
+    <form method="get" action="/kalkulacjaulgidotacje">
+    <button type="submit" name = "tak_button" value="TAK" class="btn btn-primary">TAK</button>
+    </form>
+<form method=POST action="">
+
     {% csrf_token %}
 
     <br><br>
-    <button type="submit" name = "tak_button" value="TAK" class="btn btn-primary">TAK</button>
+
      <br><br>
-    <button type="submit" value="NIE" class="btn btn-primary">NIE</button>
+    <button type="submit" name = "nie_button" value="NIE" class="btn btn-primary">NIE</button>
 
 </form>
+
 </div>
 
 

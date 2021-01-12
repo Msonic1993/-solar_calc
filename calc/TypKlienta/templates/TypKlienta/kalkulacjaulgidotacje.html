@@ -1,0 +1,49 @@
+{% extends 'TypKlienta/base.html' %}
+{% load sitetree %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+{% load myTags %}
+
+{% block title %}Kalkulacja cenowa{% endblock %}
+
+{% block content %}
+<div>
+    <h1>Ulgi i dotacje </h1>
+</div>
+
+<br>
+<div>
+
+<div id="wrapper">
+<form method=POST action="">
+  <label for="yes_no_radio">Dotacja "MÓJ PRĄD"</label>
+<p>
+<input type="radio" name="yes_no" >Tak</input>
+</p>
+<p>
+<input type="radio" name="yes_no">Nie</input>
+</p>
+
+  <label for="termoulga">Ulga termomodernizacyjna"</label>
+<label for="kwotapodatku">First name:</label>
+  <input type="text" id="kwotapodatku" name="kwotapodatku"><br><br>
+<p>
+<input type="radio" name="wg17" checked>według stawki 17%</input>
+</p>
+<p>
+<input type="radio" name="wg19">Wegług stawki 19%</input>
+</p>
+<p>
+<input type="radio" name="wg32">Wegług stawki 32%</input>
+</p>
+
+{% csrf_token %}
+<button type="submit"  class="btn btn-primary">Zatwierdź</button>
+</form>
+</div>
+<div>
+     <a href="/podsumowaniebezdotacji/"> <button type="submit" class="btn btn-info">Przejdz do nastepnego kroku</button></a>
+</div>
+
+{% endblock %}

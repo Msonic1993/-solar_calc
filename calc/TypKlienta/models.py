@@ -213,6 +213,9 @@ class klient(BaseModel):
     KosztPPOZ = models.DecimalField(max_digits=100, decimal_places=2, null=True)
     KosztInstalacjiNetto = models.DecimalField(max_digits=100, decimal_places=2, null=True)
     KosztInstalacjiBrutto = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+    MojPrad = models.IntegerField(null=True)
+    UlgaTermomodernizacyjna = models.DecimalField(max_digits=100, decimal_places=2, null=True)
+    Rabat = models.IntegerField(null=True)
     KamId = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
     class Meta:

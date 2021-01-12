@@ -17,7 +17,7 @@ from TypKlienta import views
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
-from TypKlienta.views import index,glowna,register, KalkulacjaCenowa,KalkulacjaFalownika,KalkulacjaOptymalizatory,KalkulacjaSystemMontazowy,KalkulacjaSkrzynkiAC,KalkulacjaLiczbaStringow,KalkulacjaPraceGruntowe,KalkulacjaElementyDodatkowe,KalkulacjaPPOZ,PodsumowanieBezDotacji
+from TypKlienta.views import index,glowna,register, KalkulacjaCenowa,KalkulacjaFalownika,KalkulacjaOptymalizatory,KalkulacjaSystemMontazowy,KalkulacjaSkrzynkiAC,KalkulacjaLiczbaStringow,KalkulacjaPraceGruntowe,KalkulacjaElementyDodatkowe,KalkulacjaPPOZ,PodsumowanieBezDotacji,UlgiDotacje
 from TypKlienta.views import klienciListView
 from django_filters.views import FilterView
 from TypKlienta.filters import KlientFilter
@@ -39,7 +39,8 @@ urlpatterns = [
     path("kalkulacjapracegruntowe/", KalkulacjaPraceGruntowe, name='kalkulacjapracegruntowe'),
     path("kalkulacjaelementydodatkowe/", KalkulacjaElementyDodatkowe, name='kalkulacjaelementydodatkowe'),
     path("kalkulacjappoz/", KalkulacjaPPOZ, name='kalkulacjappoz'),
-    path("kalkulacjapytaniedotacje/", PodsumowanieBezDotacji, name='PodsumowanieBezDotacji'),
+    path("podsumowaniebezdotacji/", PodsumowanieBezDotacji, name='PodsumowanieBezDotacji'),
+    path("kalkulacjaulgidotacje/", UlgiDotacje, name='UlgiDotacje'),
     path('register/',LoginView.as_view(template_name='TypKlienta/login.html'),name="login"),
     path('login/',LoginView.as_view(template_name='TypKlienta/login.html'),name="login"),
     path('logout/',  LogoutView.as_view(template_name='TypKlienta/logout.html'), name="login"),

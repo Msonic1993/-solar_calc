@@ -486,29 +486,52 @@ def KalkulacjaPPOZ(request):
                                                                         'LiczbaOptyalizatorowStr': LiczbaOptyalizatorowStr,
                                                                         'NazwaOptyalizatorowStr': NazwaOptyalizatorowStr,
                                                                         'NazwaSystemuMontazowegoStr': NazwaSystemuMontazowegoStr})
+def UlgiDotacje(request):
 
-def PodsumowanieBezDotacji(request):
+    if "Tak" in request.POST:
 
-    if 'tak_button' in request.POST:
+        modelform = "Tak"
 
-        modelform = "TAK"
-
+        LatestData = klient.objects.latest("data").IdKlienta
+        klient.objects.filter(IdKlienta=LatestData).update(MojPrad=5000)
         obliczenie1 = PodsumowanieBezDotacjiCalc(modelform)
         PodsumowanieWynik = obliczenie1.count_PodsumowanieBezDotacjiCalc()[0]
         PodsumowanieWynikBrutto = obliczenie1.count_PodsumowanieBezDotacjiCalc()[1]
+        LatestData = klient.objects.latest("data").IdKlienta
+        klient.objects.filter(IdKlienta=LatestData).update(KosztInstalacjiNetto=PodsumowanieWynik)
+        klient.objects.filter(IdKlienta=LatestData).update(KosztInstalacjiBrutto=PodsumowanieWynikBrutto)
+
+    else:
+        modelform = "Nie"
+        LatestData = klient.objects.latest("data").IdKlienta
+        klient.objects.filter(IdKlienta=LatestData).update(MojPrad=0)
+        obliczenie1 = PodsumowanieBezDotacjiCalc(modelform)
+        PodsumowanieWynik = obliczenie1.count_PodsumowanieBezDotacjiCalc()[0]
+        PodsumowanieWynikBrutto = obliczenie1.count_PodsumowanieBezDotacjiCalc()[1]
+        LatestData = klient.objects.latest("data").IdKlienta
+        klient.objects.filter(IdKlienta=LatestData).update(KosztInstalacjiNetto=PodsumowanieWynik)
+        klient.objects.filter(IdKlienta=LatestData).update(KosztInstalacjiBrutto=PodsumowanieWynikBrutto)
+
+        return render(request, 'TypKlienta/kalkulacjaulgidotacje.html', {
+            'PodsumowanieBezDotacji': PodsumowanieWynik,
+            'PodsumowanieBezDotacjiBrutto': PodsumowanieWynikBrutto
+        })
+    return render(request, 'TypKlienta/kalkulacjaulgidotacje.html', {
+                                                                        })
+
+
+
+def PodsumowanieBezDotacji(request):
 
 
         LatestData = klient.objects.latest("data").IdKlienta
-        klient.objects.filter(IdKlienta=LatestData).update(KosztInstalacjiNetto=PodsumowanieWynik)
-
-
+        PodsumowanieWynik=klient.objects.last().KosztInstalacjiNetto
+        PodsumowanieWynikBrutto= klient.objects.last().KosztInstalacjiBrutto
 
         return render(request, 'TypKlienta/podsumowaniebezdotacji.html', {
                                                                         'PodsumowanieBezDotacji': PodsumowanieWynik,
             'PodsumowanieBezDotacjiBrutto': PodsumowanieWynikBrutto
                                                                      })
-    return render(request, 'TypKlienta/kalkulacjapytaniedotacje.html', {
-                                                                        })
 
 
 

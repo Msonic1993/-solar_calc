@@ -8,6 +8,8 @@ class PriceCalculationPraceGruntowe():
 
         if modelformIloscM2:
             self.KosztPracGruntowych=float(modelformIloscM2) * 30.00
+        else:
+            self.KosztPracGruntowych = 0.00
 
     def count_PriceCalculationPraceGruntowe(self):
         return self.KosztPracGruntowych

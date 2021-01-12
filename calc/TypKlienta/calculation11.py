@@ -26,32 +26,34 @@ class PodsumowanieBezDotacjiCalc():
     MocModulowStr = klient.objects.last().MocInstalacji
     TypKilentaStr = klient.objects.last().typ_id
     MetrazStr = klient.objects.last().metraz
-    print(MetrazStr)
+    UlgaMojPrad = klient.objects.last().MojPrad
+    print(TypKilentaStr)
 
     def __init__(self, modelform):
         self.modelform = str(modelform)
-        if self.modelform == "TAK":
+        print(self.modelform)
+        if self.modelform == "Nie" or self.modelform == "Tak":
           self.PodsumowanieWynik1=  self.WartoscModulowStr + self.WartoscFalownikowStr + self.WartoscSystemuMontazowegoStr + self.WartoscSkrzynekACStr +self.WartoscStringowStr + self.WartoscOkablowaniaACStr +self.WartoscOkablowaniaDCStr +self.KosztTransportuStr +self.KosztMontazuStr + self.KosztPracGruntowychStr +self.KosztWiFiExtenderStr + self.KosztZwyszkaStr + self.KosztPPOZStr
           self.PodsumowanieWynik2 = self.PodsumowanieWynik1 / (1-self.MarzaFirmyStr)
           self.PodsumowanieWynik = self.PodsumowanieWynik2 + (self.MarzaHandlowcaStr * self.MocModulowStr)
 
         if  self.TypKilentaStr == "indywidualny" and self.MetrazStr <= 300:
-            self.PodsumowanieWynikBrutto = float(self.PodsumowanieWynik) * 0.08 + float(self.PodsumowanieWynik)
+            self.PodsumowanieWynikBrutto = float(self.PodsumowanieWynik) * 0.08 + float(self.PodsumowanieWynik)- self.UlgaMojPrad
 
         else:
             if self.TypKilentaStr == "indywidualny" and self.MetrazStr > 300:
-               self.PodsumowanieWynikBrutto = float(self.PodsumowanieWynik) * 0.23 + float(self.PodsumowanieWynik)
+               self.PodsumowanieWynikBrutto = float(self.PodsumowanieWynik) * 0.23 + float(self.PodsumowanieWynik)- self.UlgaMojPrad
             else:
                 if self.TypKilentaStr == "Biznesowy":
-                   self.PodsumowanieWynikBrutto = float(self.PodsumowanieWynik) * 0.23 + float(self.PodsumowanieWynik)
+                   self.PodsumowanieWynikBrutto = float(self.PodsumowanieWynik) * 0.23 + float(self.PodsumowanieWynik) - self.UlgaMojPrad
                 else:
                    if self.TypKilentaStr == "Rolnik - gospodarstwa domowego" and self.MetrazStr <= 300:
-                       self.PodsumowanieWynikBrutto = float(self.PodsumowanieWynik) * 0.08 + float(self.PodsumowanieWynik)
+                       self.PodsumowanieWynikBrutto = float(self.PodsumowanieWynik) * 0.08 + float(self.PodsumowanieWynik)- self.UlgaMojPrad
                    else:
                        if self.TypKilentaStr == "Rolnik - gospodarstwa domowego" and self.MetrazStr > 300:
-                           self.PodsumowanieWynikBrutto = float(self.PodsumowanieWynik) * 0.23 + float( self.PodsumowanieWynik)
+                           self.PodsumowanieWynikBrutto = float(self.PodsumowanieWynik) * 0.23 + float( self.PodsumowanieWynik)- self.UlgaMojPrad
                        else:
-                           self.PodsumowanieWynikBrutto = float(self.PodsumowanieWynik) * 0.23 + float(self.PodsumowanieWynik)
+                           self.PodsumowanieWynikBrutto = float(self.PodsumowanieWynik) * 0.23 + float(self.PodsumowanieWynik)- self.UlgaMojPrad
 
 
 
