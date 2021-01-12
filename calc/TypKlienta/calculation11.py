@@ -27,15 +27,13 @@ class PodsumowanieBezDotacjiCalc():
     TypKilentaStr = klient.objects.last().typ_id
     MetrazStr = klient.objects.last().metraz
     UlgaMojPrad = klient.objects.last().MojPrad
-    print(TypKilentaStr)
 
-    def __init__(self, modelform):
-        self.modelform = str(modelform)
-        print(self.modelform)
-        if self.modelform == "Nie" or self.modelform == "Tak":
-          self.PodsumowanieWynik1=  self.WartoscModulowStr + self.WartoscFalownikowStr + self.WartoscSystemuMontazowegoStr + self.WartoscSkrzynekACStr +self.WartoscStringowStr + self.WartoscOkablowaniaACStr +self.WartoscOkablowaniaDCStr +self.KosztTransportuStr +self.KosztMontazuStr + self.KosztPracGruntowychStr +self.KosztWiFiExtenderStr + self.KosztZwyszkaStr + self.KosztPPOZStr
-          self.PodsumowanieWynik2 = self.PodsumowanieWynik1 / (1-self.MarzaFirmyStr)
-          self.PodsumowanieWynik = self.PodsumowanieWynik2 + (self.MarzaHandlowcaStr * self.MocModulowStr)
+
+    def __init__(self):
+
+        self.PodsumowanieWynik1=  self.WartoscModulowStr + self.WartoscFalownikowStr + self.WartoscSystemuMontazowegoStr + self.WartoscSkrzynekACStr +self.WartoscStringowStr + self.WartoscOkablowaniaACStr +self.WartoscOkablowaniaDCStr +self.KosztTransportuStr +self.KosztMontazuStr +self.KosztWiFiExtenderStr + self.KosztZwyszkaStr + self.KosztPPOZStr + self.KosztPracGruntowychStr
+        self.PodsumowanieWynik2 = self.PodsumowanieWynik1 / (1-self.MarzaFirmyStr)
+        self.PodsumowanieWynik = self.PodsumowanieWynik2 + (self.MarzaHandlowcaStr * self.MocModulowStr)
 
         if  self.TypKilentaStr == "indywidualny" and self.MetrazStr <= 300:
             self.PodsumowanieWynikBrutto = float(self.PodsumowanieWynik) * 0.08 + float(self.PodsumowanieWynik)- self.UlgaMojPrad

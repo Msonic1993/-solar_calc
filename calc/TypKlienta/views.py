@@ -343,15 +343,14 @@ def KalkulacjaPraceGruntowe(request):
 
     if request.method == 'POST':
         modelformIloscM2 = request.POST.get('modelformIloscM2')
-
+        print(modelformIloscM2)
+        if modelformIloscM2 is None:
+            modelformIloscM2 = 0.00
         if modelformIloscM2:
             modelformIloscM2 = request.POST.get('modelformIloscM2')
-            if modelformIloscM2 =="":
-                modelformIloscM2 = 0.00
             obliczenie1 = PriceCalculationPraceGruntowe(modelformIloscM2)
             KosztPracGruntowych = obliczenie1.count_PriceCalculationPraceGruntowe()
             KosztPracGruntowych1 = str(KosztPracGruntowych)
-
             LatestData = klient.objects.latest("data").IdKlienta
             klient.objects.filter(IdKlienta=LatestData).update(KosztPracGruntowych=KosztPracGruntowych)
             klient.objects.filter(IdKlienta=LatestData).update(IloscPracGruntowych=modelformIloscM2)
@@ -450,20 +449,20 @@ def KalkulacjaPPOZ(request):
         form = PPOZForm(request.POST)
 
         if form.is_valid():
-          print("")
+            modelform = form["ObowiazkowePPOZ"].value()
+            print(modelform)
         else:
             modelform = form["ObowiazkowePPOZ"].value()
             print(modelform)
-            print("modelform")
-            obliczenie1 = PriceZabezpieczeniePPOZ(modelform, yy)
-            KosztPPOZ = obliczenie1.count_PriceZabezpieczeniePPOZ()
-            KosztPPOZ1 = Decimal(KosztPPOZ)
 
-            LatestData = klient.objects.latest("data").IdKlienta
-            klient.objects.filter(IdKlienta=LatestData).update(KosztPPOZ=KosztPPOZ1)
+        obliczenie1 = PriceZabezpieczeniePPOZ(modelform, yy)
+        KosztPPOZ = obliczenie1.count_PriceZabezpieczeniePPOZ()
+        KosztPPOZ1 = Decimal(KosztPPOZ)
+        LatestData = klient.objects.latest("data").IdKlienta
+        klient.objects.filter(IdKlienta=LatestData).update(KosztPPOZ=KosztPPOZ1)
 
 
-            return render(request, 'TypKlienta/kalkulacjappoz.html', {'SugerowanaMoc': y,
+        return render(request, 'TypKlienta/kalkulacjappoz.html', {'SugerowanaMoc': y,
                                                                                 'LiczbaModulowStr': LiczbaModulowStr,
                                                                                 'NazwaModuluStr': NazwaModuluStr,
                                                                                 'LiczbaOptyalizatorowStr': LiczbaOptyalizatorowStr,
@@ -488,47 +487,40 @@ def KalkulacjaPPOZ(request):
                                                                         'NazwaSystemuMontazowegoStr': NazwaSystemuMontazowegoStr})
 def UlgiDotacje(request):
 
-    if "Tak" in request.POST:
+    MojPrad = request.POST.get('mojpradoptions')
 
-        modelform = "Tak"
-
+    if MojPrad == "Tak":
+        print(request.POST)
         LatestData = klient.objects.latest("data").IdKlienta
         klient.objects.filter(IdKlienta=LatestData).update(MojPrad=5000)
-        obliczenie1 = PodsumowanieBezDotacjiCalc(modelform)
-        PodsumowanieWynik = obliczenie1.count_PodsumowanieBezDotacjiCalc()[0]
-        PodsumowanieWynikBrutto = obliczenie1.count_PodsumowanieBezDotacjiCalc()[1]
-        LatestData = klient.objects.latest("data").IdKlienta
-        klient.objects.filter(IdKlienta=LatestData).update(KosztInstalacjiNetto=PodsumowanieWynik)
-        klient.objects.filter(IdKlienta=LatestData).update(KosztInstalacjiBrutto=PodsumowanieWynikBrutto)
-
     else:
-        modelform = "Nie"
+        print(request.POST)
         LatestData = klient.objects.latest("data").IdKlienta
         klient.objects.filter(IdKlienta=LatestData).update(MojPrad=0)
-        obliczenie1 = PodsumowanieBezDotacjiCalc(modelform)
-        PodsumowanieWynik = obliczenie1.count_PodsumowanieBezDotacjiCalc()[0]
-        PodsumowanieWynikBrutto = obliczenie1.count_PodsumowanieBezDotacjiCalc()[1]
-        LatestData = klient.objects.latest("data").IdKlienta
-        klient.objects.filter(IdKlienta=LatestData).update(KosztInstalacjiNetto=PodsumowanieWynik)
-        klient.objects.filter(IdKlienta=LatestData).update(KosztInstalacjiBrutto=PodsumowanieWynikBrutto)
 
-        return render(request, 'TypKlienta/kalkulacjaulgidotacje.html', {
-            'PodsumowanieBezDotacji': PodsumowanieWynik,
-            'PodsumowanieBezDotacjiBrutto': PodsumowanieWynikBrutto
-        })
+
     return render(request, 'TypKlienta/kalkulacjaulgidotacje.html', {
-                                                                        })
+    })
+
+
+
 
 
 
 def PodsumowanieBezDotacji(request):
 
 
-        LatestData = klient.objects.latest("data").IdKlienta
-        PodsumowanieWynik=klient.objects.last().KosztInstalacjiNetto
-        PodsumowanieWynikBrutto= klient.objects.last().KosztInstalacjiBrutto
+    obliczenie1 = PodsumowanieBezDotacjiCalc()
+    PodsumowanieWynik = obliczenie1.count_PodsumowanieBezDotacjiCalc()[0]
+    PodsumowanieWynikBrutto = obliczenie1.count_PodsumowanieBezDotacjiCalc()[1]
+    LatestData = klient.objects.latest("data").IdKlienta
+    klient.objects.filter(IdKlienta=LatestData).update(KosztInstalacjiNetto=PodsumowanieWynik)
+    klient.objects.filter(IdKlienta=LatestData).update(KosztInstalacjiBrutto=PodsumowanieWynikBrutto)
+    LatestData = klient.objects.latest("data").IdKlienta
+    PodsumowanieWynik=klient.objects.last().KosztInstalacjiNetto
+    PodsumowanieWynikBrutto= klient.objects.last().KosztInstalacjiBrutto
 
-        return render(request, 'TypKlienta/podsumowaniebezdotacji.html', {
+    return render(request, 'TypKlienta/podsumowaniebezdotacji.html', {
                                                                         'PodsumowanieBezDotacji': PodsumowanieWynik,
             'PodsumowanieBezDotacjiBrutto': PodsumowanieWynikBrutto
                                                                      })

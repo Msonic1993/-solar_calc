@@ -101,11 +101,13 @@ PPOZ_CHOICES = [
 ]
 class PPOZForm(forms.Form):
 
-    KlientPPOZ = klient.objects.last().WymaganaMoc
+    KlientPPOZ = klient.objects.last().MocInstalacji
     KlientPPOZFloat = float(str(KlientPPOZ))
 
-    if KlientPPOZFloat > 6500:
+    if KlientPPOZFloat > 6.5:
          ObowiazkowePPOZ = forms.CharField(label='',
                     widget=forms.TextInput(attrs={'placeholder': 'Instalacja pow. 6,5 kW. Zabezpieczenie PPOŻ jest obowiązkowe', 'readonly':'readonly','size':55, 'maxlength':30},))
     else:
         ObowiazkowePPOZ = forms.ChoiceField(choices=PPOZ_CHOICES, label="Zabezpieczenie PPOŻ ")
+
+

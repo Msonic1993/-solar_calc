@@ -31,6 +31,9 @@
   <label class="form-check-label" for="GroundWorksCheck1"> Nie </label>
 </div>
 <input id="textM2" name="modelformIloscM2" style="display:none" placeholder="Wpisz ilość m2">
+    {% if modelformIloscM2 is None %}
+ <input id="textM2" name="modelformIloscM2" style="display:none" value =0.00 placeholder="Wpisz ilość m2">
+{% endif %}
     <br><br>
   <button type="submit" value="oblicz" class="btn btn-primary">Oblicz</button>
 

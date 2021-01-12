@@ -17,7 +17,8 @@ class PriceZabezpieczeniePPOZ():
                     if Decimal(yy) > 25000.00:
                         self.KosztPPOZ = 3500.00
         else:
-            self.KosztPPOZ = 0.00
+            if self.modelform == "NIE":
+                self.KosztPPOZ = 0.00
 
 
 
