@@ -509,6 +509,7 @@ def UlgiDotacje(request):
 
 def PodsumowanieBezDotacji(request):
 
+    LatestDataKlient = klient.objects.latest("data").data
 
     obliczenie1 = PodsumowanieBezDotacjiCalc()
     PodsumowanieWynik = obliczenie1.count_PodsumowanieBezDotacjiCalc()[0]
@@ -516,12 +517,12 @@ def PodsumowanieBezDotacji(request):
     LatestData = klient.objects.latest("data").IdKlienta
     klient.objects.filter(IdKlienta=LatestData).update(KosztInstalacjiNetto=PodsumowanieWynik)
     klient.objects.filter(IdKlienta=LatestData).update(KosztInstalacjiBrutto=PodsumowanieWynikBrutto)
-    LatestData = klient.objects.latest("data").IdKlienta
     PodsumowanieWynik=klient.objects.last().KosztInstalacjiNetto
     PodsumowanieWynikBrutto= klient.objects.last().KosztInstalacjiBrutto
 
     return render(request, 'TypKlienta/podsumowaniebezdotacji.html', {
                                                                         'PodsumowanieBezDotacji': PodsumowanieWynik,
+        'LatestDataKlient': LatestDataKlient,
             'PodsumowanieBezDotacjiBrutto': PodsumowanieWynikBrutto
                                                                      })
 

@@ -8,10 +8,26 @@
 {% block title %}Kalkulacja cenowa{% endblock %}
 
 {% block content %}
+  <h3>Podsumowanie końcowe</h3>
 
+       <div class="container-fluid">
+    <!-- Control the column width, and how they should appear on different devices -->
+    <div class="row">
+      <div class="col-sm-6" style="background-color:;">
+             <p><b> Ofertę sporządził:</b> {{user.first_name}} {{user.last_name}}</p>
+        <p><b> Tel:</b> {{user.profile.phone}} <b>email: </b> {{user.email}}</p>
+      </div>
+      <div class="col-sm-6" style="background-color:;">
+             <p><b> Data:</b> {{LatestDataKlient}} </p>
 
-<br>
-<div>
+      </div>
+    </div>
+
+            <div class="row">
+      <div class="col-sm-4" style="background-color:yellow;">33.33%</div>
+      <div class="col-sm-4" style="background-color:orange;"> <h1>Oferta na system fotowoltaiczny firmy: </h1></div>
+      <div class="col-sm-4" style="background-color:yellow;">33.33%</div>
+    </div>
 <form method=POST action="">
     <p> Koszty</p>
     {% csrf_token %}

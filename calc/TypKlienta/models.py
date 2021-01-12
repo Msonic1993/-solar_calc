@@ -12,9 +12,12 @@ class BaseModel(models.Model):
 
 
 class Profile(models.Model):
+    def __str__(self):
+        return self.user.username
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(max_length=500, blank=True)
-    is_confirmed = models.BooleanField(default=False)
+    phone = models.IntegerField(null=True)
+
 
 
 @receiver(post_save, sender=User)
