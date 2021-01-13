@@ -1,10 +1,10 @@
+from django.http import request
+
 from .models import klient,Moduly,Falowniki,Optymalizatory,Systemmontazowy
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm, Textarea
 from django import forms
-
-
 
 class DodajKlienta(ModelForm):
 
@@ -100,8 +100,8 @@ PPOZ_CHOICES = [
 
 ]
 class PPOZForm(forms.Form):
-
-    KlientPPOZ = klient.objects.last().MocInstalacji
+    LatestData = klient.objects.latest ("data").IdKlienta
+    KlientPPOZ = klient.objects.get(IdKlienta=LatestData).MocInstalacji
     KlientPPOZFloat = float(str(KlientPPOZ))
 
     if KlientPPOZFloat > 6.5:

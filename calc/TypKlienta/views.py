@@ -1,20 +1,8 @@
 from decimal import Decimal
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.auth import authenticate, login
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect, request
-from django.urls import reverse
-from django_tables2 import SingleTableView
-from django_filters.views import FilterView
-import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
-
-from django.contrib.auth.forms import UserCreationForm
-from django.views.generic.edit import CreateView
-from django.http import JsonResponse
-
 from .calculation10 import PriceZabezpieczeniePPOZ
 from .calculation11 import PodsumowanieBezDotacjiCalc
 from .calculation2 import PriceCalculation
@@ -32,8 +20,6 @@ from .filters import KlientFilter
 from .forms import DodajKlienta, ModulyForm, FalownikiForm
 from .models import TypKlienta, Vat, klient, KadNachyleniaDachu, WymaganaMocInstalacji, EkspozycjaDachowa, Moduly, \
     Falowniki, Optymalizatory, Systemmontazowy
-from .tables import KlientTable
-from django_tables2.views import SingleTableMixin
 from django.shortcuts import render
 
 
@@ -54,12 +40,9 @@ def index(request):
             mnoznik = EkspozycjaDachowa.objects.get(ekspozycja=ekspozycja).mnoznik
             obliczenie = PowerComsumption(zuzycie, metraz, kadnachylenia, przelicznik, ekspozycja, mnoznik)
             wynik = obliczenie.count_Comsumption()
-
-            GetId = klient.objects.get(imie=Imieklienta, nazwisko=NazwiskoKlienta, zuzycie=zuzycie,
-                                       metraz=metraz).IdKlienta
+            GetId = klient.objects.get(imie=Imieklienta, nazwisko=NazwiskoKlienta, zuzycie=zuzycie,metraz=metraz).IdKlienta
             insertMocInstalacji = WymaganaMocInstalacji(IdKlienta=GetId, WymaganaMoc=wynik)
             insertMocInstalacji.save()
-
             x = WymaganaMocInstalacji.objects.get(IdKlienta=GetId).id
             klient.objects.filter(IdKlienta=GetId).update(WymaganaMoc_id=x)
             # klient.objects.filter(IdKlienta=GetId).update(field1='some value')
@@ -80,7 +63,6 @@ def klienciListView(request):
 
     if (request.GET.get('DeleteButton')):
         klient.objects.filter(pk=request.GET.get('DeleteButton')).delete()
-
 
     return render(request, 'TypKlienta/klienci.html', {'filter': user_filter,'form': form() })
 
@@ -115,15 +97,16 @@ def KalkulacjaCenowa(request):
             MocInstalacji = obliczenie1.count_PriceCalculation()[2]
             LatestData = klient.objects.latest("data").IdKlienta
             klient.objects.filter(IdKlienta=LatestData).update(KamId_id=request.user)
-            klient.objects.filter(IdKlienta=LatestData).update(LiczbaModulow=LiczbaModulow)
-            klient.objects.filter(IdKlienta=LatestData).update(WartoscModulow=WartoscModulow)
-            klient.objects.filter(IdKlienta=LatestData).update(NazwaModulu=modelform)
-            klient.objects.filter(IdKlienta=LatestData).update(MocInstalacji=MocInstalacji)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(LiczbaModulow=LiczbaModulow)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(WartoscModulow=WartoscModulow)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(NazwaModulu=modelform)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(MocInstalacji=MocInstalacji)
 
-            return render(request, 'TypKlienta/kalkulacjacenowa.html',
-                          {'SugerowanaMoc': y, 'LiczbaModulow': LiczbaModulow, 'WartoscModulow': WartoscModulow,
-                           'modelform': modelform, 'form': ModulyForm(), 'form2': form2})
-    return render(request, 'TypKlienta/kalkulacjacenowa.html', {'form': ModulyForm(), 'SugerowanaMoc': y})
+            return render (request, 'TypKlienta/kalkulacjacenowa.html',
+                           {'SugerowanaMoc': y, 'LiczbaModulow': LiczbaModulow, 'WartoscModulow': WartoscModulow,
+                            'modelform': modelform, 'form': ModulyForm (), 'form2': form2
+                            })
+    return render (request, 'TypKlienta/kalkulacjacenowa.html', {'form': ModulyForm (), 'SugerowanaMoc': y})
 
 
 def KalkulacjaFalownika(request):
@@ -149,17 +132,19 @@ def KalkulacjaFalownika(request):
             WartoscFalownikow = obliczenie1.count_PriceCalculationFalowniki()
 
             LatestData = klient.objects.latest("data").IdKlienta
-            klient.objects.filter(IdKlienta=LatestData).update(LiczbaFalownikow=intform2)
-            klient.objects.filter(IdKlienta=LatestData).update(WartoscFalownikow=WartoscFalownikow)
-            klient.objects.filter(IdKlienta=LatestData).update(NazwaFalownika=modelform)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(LiczbaFalownikow=intform2)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(WartoscFalownikow=WartoscFalownikow)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(NazwaFalownika=modelform)
 
-            return render(request, 'TypKlienta/kalkulacjafalownika.html',
-                          {'SugerowanaMoc': y, 'LiczbaModulowStr': LiczbaModulowStr, 'NazwaModuluStr': NazwaModuluStr,
-                           'WartoscFalownikow': WartoscFalownikow, 'modelform': modelform, 'form': FalownikiForm(),
-                           'form2': form2})
-    return render(request, 'TypKlienta/kalkulacjafalownika.html',
-                  {'form': FalownikiForm(), 'SugerowanaMoc': y, 'LiczbaModulowStr': LiczbaModulowStr,
-                   'NazwaModuluStr': NazwaModuluStr})
+            return render (request, 'TypKlienta/kalkulacjafalownika.html',
+                           {'SugerowanaMoc': y, 'LiczbaModulowStr': LiczbaModulowStr, 'NazwaModuluStr': NazwaModuluStr,
+                            'WartoscFalownikow': WartoscFalownikow, 'modelform': modelform, 'form': FalownikiForm (),
+                            'form2': form2
+                            })
+    return render (request, 'TypKlienta/kalkulacjafalownika.html',
+                   {'form': FalownikiForm (), 'SugerowanaMoc': y, 'LiczbaModulowStr': LiczbaModulowStr,
+                    'NazwaModuluStr': NazwaModuluStr
+                    })
 
 
 def KalkulacjaOptymalizatory(request):
@@ -186,9 +171,9 @@ def KalkulacjaOptymalizatory(request):
             WartoscOptymalizatorow = obliczenie1.count_PriceCalculationOptymalizatory()
 
             LatestData = klient.objects.latest("data").IdKlienta
-            klient.objects.filter(IdKlienta=LatestData).update(LiczbaOptymalizatorow=intform2)
-            klient.objects.filter(IdKlienta=LatestData).update(WartoscOptymalizatorow=WartoscOptymalizatorow)
-            klient.objects.filter(IdKlienta=LatestData).update(NazwaOptymalizatora=modelform)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(LiczbaOptymalizatorow=intform2)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(WartoscOptymalizatorow=WartoscOptymalizatorow)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(NazwaOptymalizatora=modelform)
 
             return render(request, 'TypKlienta/kalkulacjaoptymaliztorymocy.html',
                           {'SugerowanaMoc': y, 'LiczbaModulowStr': LiczbaModulowStr, 'NazwaModuluStr': NazwaModuluStr,
@@ -224,8 +209,8 @@ def KalkulacjaSystemMontazowy(request):
             WartoscSystemuMontazowego = obliczenie1.count_PriceCalculationSystemmontazowy()
 
             LatestData = klient.objects.latest("data").IdKlienta
-            klient.objects.filter(IdKlienta=LatestData).update(WartoscSystemuMontazowego=WartoscSystemuMontazowego)
-            klient.objects.filter(IdKlienta=LatestData).update(NazwaSystemuMontazowego=modelform)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(WartoscSystemuMontazowego=WartoscSystemuMontazowego)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(NazwaSystemuMontazowego=modelform)
 
             return render(request, 'TypKlienta/kalkulacjasystemymontazowe.html',
                           {'SugerowanaMoc': y, 'LiczbaModulowStr': LiczbaModulowStr, 'NazwaModuluStr': NazwaModuluStr,
@@ -236,8 +221,8 @@ def KalkulacjaSystemMontazowy(request):
                            'modelform': modelform, 'form': SystemMontazowyForm()})
     return render(request, 'TypKlienta/kalkulacjasystemymontazowe.html',
                   {'form': SystemMontazowyForm(), 'SugerowanaMoc': y, 'LiczbaModulowStr': LiczbaModulowStr,
-                   'NazwaModuluStr': NazwaModuluStr, 'LiczbaFalownikowStr': LiczbaFalownikowStr,
-                   'NazwaFalownikaStr': NazwaFalownikaStr})
+                   'NazwaModuluStr': NazwaModuluStr, 'LiczbaFalownikowStr': LiczbaFalownikowStr,'NazwaOptyalizatorowStr': NazwaOptyalizatorowStr,
+                   'NazwaFalownikaStr': NazwaFalownikaStr,'LiczbaOptyalizatorowStr': LiczbaOptyalizatorowStr})
 
 
 def KalkulacjaLiczbaStringow(request):
@@ -262,32 +247,36 @@ def KalkulacjaLiczbaStringow(request):
             WartoscStringow1 = str(WartoscStringow)
 
             LatestData = klient.objects.latest("data").IdKlienta
-            klient.objects.filter(IdKlienta=LatestData).update(WartoscStringow=WartoscStringow)
-            klient.objects.filter(IdKlienta=LatestData).update(IloscStringow=modelform)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(WartoscStringow=WartoscStringow)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(IloscStringow=modelform)
 
-            return render(request, 'TypKlienta/kalkulacjaliczbastringow.html', {'SugerowanaMoc': y,
-                                                                                'LiczbaModulowStr': LiczbaModulowStr,
-                                                                                'NazwaModuluStr': NazwaModuluStr,
-                                                                                'LiczbaOptyalizatorowStr': LiczbaOptyalizatorowStr,
-                                                                                'NazwaOptyalizatorowStr': NazwaOptyalizatorowStr,
-                                                                                'LiczbaStringowForm': LiczbaStringowForm,
-                                                                                'LiczbaFalownikowStr': LiczbaFalownikowStr,
-                                                                                'NazwaFalownikaStr': NazwaFalownikaStr,
-                                                                                'NazwaSystemuMontazowegoStr': NazwaSystemuMontazowegoStr,
-                                                                                'modelform': modelform,
-                                                                                'form': LiczbaStringowForm(),
-                                                                                'WartoscStringow1': WartoscStringow1})
+            return render (request, 'TypKlienta/kalkulacjaliczbastringow.html',
+                {'SugerowanaMoc': y,
+                'LiczbaModulowStr': LiczbaModulowStr,
+                'NazwaModuluStr': NazwaModuluStr,
+                'LiczbaOptyalizatorowStr': LiczbaOptyalizatorowStr,
+                'NazwaOptyalizatorowStr': NazwaOptyalizatorowStr,
+                'LiczbaStringowForm': LiczbaStringowForm,
+                'LiczbaFalownikowStr': LiczbaFalownikowStr,
+                'NazwaFalownikaStr': NazwaFalownikaStr,
+                'NazwaSystemuMontazowegoStr': NazwaSystemuMontazowegoStr,
+                'modelform': modelform,
+                'form': LiczbaStringowForm (),
+                'WartoscStringow1': WartoscStringow1
+                })
 
-    return render(request, 'TypKlienta/kalkulacjaliczbastringow.html', {'form': LiczbaStringowForm(),
-                                                                        'SugerowanaMoc': y,
-                                                                        'LiczbaModulowStr': LiczbaModulowStr,
-                                                                        'NazwaModuluStr': NazwaModuluStr,
-                                                                        'LiczbaFalownikowStr': LiczbaFalownikowStr,
-                                                                        'NazwaFalownikaStr': NazwaFalownikaStr,
-                                                                        'LiczbaOptyalizatorowStr': LiczbaOptyalizatorowStr,
-                                                                        'NazwaOptyalizatorowStr': NazwaOptyalizatorowStr,
-                                                                        'NazwaSystemuMontazowegoStr': NazwaSystemuMontazowegoStr})
+    return render (request, 'TypKlienta/kalkulacjaliczbastringow.html',
+        {'form': LiczbaStringowForm (),
+        'SugerowanaMoc': y,
+        'LiczbaModulowStr': LiczbaModulowStr,
+        'NazwaModuluStr': NazwaModuluStr,
+        'LiczbaFalownikowStr': LiczbaFalownikowStr,
+        'NazwaFalownikaStr': NazwaFalownikaStr,
+        'LiczbaOptyalizatorowStr': LiczbaOptyalizatorowStr,
+        'NazwaOptyalizatorowStr': NazwaOptyalizatorowStr,
+        'NazwaSystemuMontazowegoStr': NazwaSystemuMontazowegoStr,
 
+        })
 
 def KalkulacjaSkrzynkiAC(request):
     y = klient.objects.last().WymaganaMoc
@@ -313,12 +302,12 @@ def KalkulacjaSkrzynkiAC(request):
             KosztMontazu = obliczenie1.count_PriceCalculationSkrzynkiAC()[4]
 
             LatestData = klient.objects.latest("data").IdKlienta
-            klient.objects.filter(IdKlienta=LatestData).update(WartoscSkrzynekAC=WartoscSkrzynekAC)
-            klient.objects.filter(IdKlienta=LatestData).update(IloscSkrzynekAC=modelform)
-            klient.objects.filter(IdKlienta=LatestData).update(WartoscOkablowaniaAC=WartoscOkablowaniaAC)
-            klient.objects.filter(IdKlienta=LatestData).update(WartoscOkablowaniaDC=WartoscOkablowaniaDC)
-            klient.objects.filter(IdKlienta=LatestData).update(KosztTransportu=KosztTransportu)
-            klient.objects.filter(IdKlienta=LatestData).update(KosztMontazu=KosztMontazu)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(WartoscSkrzynekAC=WartoscSkrzynekAC)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(IloscSkrzynekAC=modelform)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(WartoscOkablowaniaAC=WartoscOkablowaniaAC)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(WartoscOkablowaniaDC=WartoscOkablowaniaDC)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(KosztTransportu=KosztTransportu)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(KosztMontazu=KosztMontazu)
 
             return render(request, 'TypKlienta/kalkulacjaskrzynkiac.html',
                           {'SugerowanaMoc': y, 'KosztMontazu': KosztMontazu, 'LiczbaModulowStr': LiczbaModulowStr,
@@ -352,32 +341,34 @@ def KalkulacjaPraceGruntowe(request):
             KosztPracGruntowych = obliczenie1.count_PriceCalculationPraceGruntowe()
             KosztPracGruntowych1 = str(KosztPracGruntowych)
             LatestData = klient.objects.latest("data").IdKlienta
-            klient.objects.filter(IdKlienta=LatestData).update(KosztPracGruntowych=KosztPracGruntowych)
-            klient.objects.filter(IdKlienta=LatestData).update(IloscPracGruntowych=modelformIloscM2)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(KosztPracGruntowych=KosztPracGruntowych)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(IloscPracGruntowych=modelformIloscM2)
 
-            return render(request, 'TypKlienta/kalkulacjapracegruntowe.html', {'SugerowanaMoc': y,
-                                                                                'LiczbaModulowStr': LiczbaModulowStr,
-                                                                                'NazwaModuluStr': NazwaModuluStr,
-                                                                                'LiczbaOptyalizatorowStr': LiczbaOptyalizatorowStr,
-                                                                                'NazwaOptyalizatorowStr': NazwaOptyalizatorowStr,
-                                                                                'LiczbaStringowForm': LiczbaStringowForm,
-                                                                                'LiczbaFalownikowStr': LiczbaFalownikowStr,
-                                                                                'NazwaFalownikaStr': NazwaFalownikaStr,
-                                                                                'NazwaSystemuMontazowegoStr': NazwaSystemuMontazowegoStr,
+            return render (request, 'TypKlienta/kalkulacjapracegruntowe.html',
+                {'SugerowanaMoc': y,
+                'LiczbaModulowStr': LiczbaModulowStr,
+                'NazwaModuluStr': NazwaModuluStr,
+                'LiczbaOptyalizatorowStr': LiczbaOptyalizatorowStr,
+                'NazwaOptyalizatorowStr': NazwaOptyalizatorowStr,
+                'LiczbaStringowForm': LiczbaStringowForm,
+                'LiczbaFalownikowStr': LiczbaFalownikowStr,
+                'NazwaFalownikaStr': NazwaFalownikaStr,
+                'NazwaSystemuMontazowegoStr': NazwaSystemuMontazowegoStr,
+                'modelformIloscM2': modelformIloscM2,
+                'KosztPracGruntowych1': KosztPracGruntowych1
+                })
 
-                                                                               'modelformIloscM2': modelformIloscM2,
-                                                                                'KosztPracGruntowych1': KosztPracGruntowych1})
-
-    return render(request, 'TypKlienta/kalkulacjapracegruntowe.html', {
-                                                                        'SugerowanaMoc': y,
-                                                                        'LiczbaModulowStr': LiczbaModulowStr,
-                                                                        'NazwaModuluStr': NazwaModuluStr,
-                                                                        'LiczbaFalownikowStr': LiczbaFalownikowStr,
-                                                                        'NazwaFalownikaStr': NazwaFalownikaStr,
-                                                                        'LiczbaOptyalizatorowStr': LiczbaOptyalizatorowStr,
-                                                                        'NazwaOptyalizatorowStr': NazwaOptyalizatorowStr,
-                                                                        'NazwaSystemuMontazowegoStr': NazwaSystemuMontazowegoStr})
-
+    return render (request, 'TypKlienta/kalkulacjapracegruntowe.html',
+        {
+        'SugerowanaMoc': y,
+        'LiczbaModulowStr': LiczbaModulowStr,
+        'NazwaModuluStr': NazwaModuluStr,
+        'LiczbaFalownikowStr': LiczbaFalownikowStr,
+        'NazwaFalownikaStr': NazwaFalownikaStr,
+        'LiczbaOptyalizatorowStr': LiczbaOptyalizatorowStr,
+        'NazwaOptyalizatorowStr': NazwaOptyalizatorowStr,
+        'NazwaSystemuMontazowegoStr': NazwaSystemuMontazowegoStr
+        })
 
 def KalkulacjaElementyDodatkowe(request):
     y = klient.objects.last().WymaganaMoc
@@ -403,36 +394,37 @@ def KalkulacjaElementyDodatkowe(request):
 
 
             LatestData = klient.objects.latest("data").IdKlienta
-            klient.objects.filter(IdKlienta=LatestData).update(Zwyszka=modelform1)
-            klient.objects.filter(IdKlienta=LatestData).update(KosztZwyszka=KosztZwyszka)
-            klient.objects.filter(IdKlienta=LatestData).update(WiFiExtender=modelform2)
-            klient.objects.filter(IdKlienta=LatestData).update(KosztWiFiExtender=KosztWiFiExtender)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(Zwyszka=modelform1)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(KosztZwyszka=KosztZwyszka)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(WiFiExtender=modelform2)
+            klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(KosztWiFiExtender=KosztWiFiExtender)
 
+            return render (request, 'TypKlienta/kalkulacjaelementydodatkowe.html',
+                {'SugerowanaMoc': y,
+                'LiczbaModulowStr': LiczbaModulowStr,
+                'NazwaModuluStr': NazwaModuluStr,
+                'LiczbaOptyalizatorowStr': LiczbaOptyalizatorowStr,
+                'NazwaOptyalizatorowStr': NazwaOptyalizatorowStr,
+                'LiczbaStringowForm': LiczbaStringowForm,
+                'LiczbaFalownikowStr': LiczbaFalownikowStr,
+                'NazwaFalownikaStr': NazwaFalownikaStr,
+                'NazwaSystemuMontazowegoStr': NazwaSystemuMontazowegoStr,
+                'modelform1': modelform1,
+                'modelform2': modelform2,
+                'form': ElementyDodatkoweForm (),
+                })
 
-            return render(request, 'TypKlienta/kalkulacjaelementydodatkowe.html', {'SugerowanaMoc': y,
-                                                                                'LiczbaModulowStr': LiczbaModulowStr,
-                                                                                'NazwaModuluStr': NazwaModuluStr,
-                                                                                'LiczbaOptyalizatorowStr': LiczbaOptyalizatorowStr,
-                                                                                'NazwaOptyalizatorowStr': NazwaOptyalizatorowStr,
-                                                                                'LiczbaStringowForm': LiczbaStringowForm,
-                                                                                'LiczbaFalownikowStr': LiczbaFalownikowStr,
-                                                                                'NazwaFalownikaStr': NazwaFalownikaStr,
-                                                                                'NazwaSystemuMontazowegoStr': NazwaSystemuMontazowegoStr,
-                                                                                'modelform1': modelform1,
-                                                                                'modelform2': modelform2,
-                                                                                'form': ElementyDodatkoweForm(),
-                                                                                    })
-
-    return render(request, 'TypKlienta/kalkulacjaelementydodatkowe.html', {'form': ElementyDodatkoweForm(),
-                                                                        'SugerowanaMoc': y,
-                                                                        'LiczbaModulowStr': LiczbaModulowStr,
-                                                                        'NazwaModuluStr': NazwaModuluStr,
-                                                                        'LiczbaFalownikowStr': LiczbaFalownikowStr,
-                                                                        'NazwaFalownikaStr': NazwaFalownikaStr,
-                                                                        'LiczbaOptyalizatorowStr': LiczbaOptyalizatorowStr,
-                                                                        'NazwaOptyalizatorowStr': NazwaOptyalizatorowStr,
-                                                                        'NazwaSystemuMontazowegoStr': NazwaSystemuMontazowegoStr})
-
+    return render (request, 'TypKlienta/kalkulacjaelementydodatkowe.html',
+        {'form': ElementyDodatkoweForm (),
+        'SugerowanaMoc': y,
+        'LiczbaModulowStr': LiczbaModulowStr,
+        'NazwaModuluStr': NazwaModuluStr,
+        'LiczbaFalownikowStr': LiczbaFalownikowStr,
+        'NazwaFalownikaStr': NazwaFalownikaStr,
+        'LiczbaOptyalizatorowStr': LiczbaOptyalizatorowStr,
+        'NazwaOptyalizatorowStr': NazwaOptyalizatorowStr,
+        'NazwaSystemuMontazowegoStr': NazwaSystemuMontazowegoStr
+        })
 
 def KalkulacjaPPOZ(request):
     y = klient.objects.last().WymaganaMoc
@@ -459,32 +451,36 @@ def KalkulacjaPPOZ(request):
         KosztPPOZ = obliczenie1.count_PriceZabezpieczeniePPOZ()
         KosztPPOZ1 = Decimal(KosztPPOZ)
         LatestData = klient.objects.latest("data").IdKlienta
-        klient.objects.filter(IdKlienta=LatestData).update(KosztPPOZ=KosztPPOZ1)
+        klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(KosztPPOZ=KosztPPOZ1)
+
+        return render (request, 'TypKlienta/kalkulacjappoz.html',
+             {'SugerowanaMoc': y,
+            'LiczbaModulowStr': LiczbaModulowStr,
+            'NazwaModuluStr': NazwaModuluStr,
+            'LiczbaOptyalizatorowStr': LiczbaOptyalizatorowStr,
+            'NazwaOptyalizatorowStr': NazwaOptyalizatorowStr,
+            'LiczbaStringowForm': LiczbaStringowForm,
+            'LiczbaFalownikowStr': LiczbaFalownikowStr,
+            'NazwaFalownikaStr': NazwaFalownikaStr,
+            'NazwaSystemuMontazowegoStr': NazwaSystemuMontazowegoStr,
+            'modelform': modelform,
+            'KosztPPOZ': KosztPPOZ,
+            'form': PPOZForm (),
+            })
+
+    return render (request, 'TypKlienta/kalkulacjappoz.html',
+        {'form': PPOZForm (),
+        'SugerowanaMoc': y,
+        'LiczbaModulowStr': LiczbaModulowStr,
+        'NazwaModuluStr': NazwaModuluStr,
+        'LiczbaFalownikowStr': LiczbaFalownikowStr,
+        'NazwaFalownikaStr': NazwaFalownikaStr,
+        'LiczbaOptyalizatorowStr': LiczbaOptyalizatorowStr,
+        'NazwaOptyalizatorowStr': NazwaOptyalizatorowStr,
+        'NazwaSystemuMontazowegoStr': NazwaSystemuMontazowegoStr
+        })
 
 
-        return render(request, 'TypKlienta/kalkulacjappoz.html', {'SugerowanaMoc': y,
-                                                                                'LiczbaModulowStr': LiczbaModulowStr,
-                                                                                'NazwaModuluStr': NazwaModuluStr,
-                                                                                'LiczbaOptyalizatorowStr': LiczbaOptyalizatorowStr,
-                                                                                'NazwaOptyalizatorowStr': NazwaOptyalizatorowStr,
-                                                                                'LiczbaStringowForm': LiczbaStringowForm,
-                                                                                'LiczbaFalownikowStr': LiczbaFalownikowStr,
-                                                                                'NazwaFalownikaStr': NazwaFalownikaStr,
-                                                                                'NazwaSystemuMontazowegoStr': NazwaSystemuMontazowegoStr,
-                                                                                'modelform': modelform,
-                                                                                'KosztPPOZ': KosztPPOZ,
-                                                                                'form': PPOZForm(),
-                                                                                    })
-
-    return render(request, 'TypKlienta/kalkulacjappoz.html', {'form': PPOZForm(),
-                                                                        'SugerowanaMoc': y,
-                                                                        'LiczbaModulowStr': LiczbaModulowStr,
-                                                                        'NazwaModuluStr': NazwaModuluStr,
-                                                                        'LiczbaFalownikowStr': LiczbaFalownikowStr,
-                                                                        'NazwaFalownikaStr': NazwaFalownikaStr,
-                                                                        'LiczbaOptyalizatorowStr': LiczbaOptyalizatorowStr,
-                                                                        'NazwaOptyalizatorowStr': NazwaOptyalizatorowStr,
-                                                                        'NazwaSystemuMontazowegoStr': NazwaSystemuMontazowegoStr})
 def UlgiDotacje(request):
 
     MojPrad = request.POST.get('mojpradoptions')
@@ -492,41 +488,49 @@ def UlgiDotacje(request):
     if MojPrad == "Tak":
         print(request.POST)
         LatestData = klient.objects.latest("data").IdKlienta
-        klient.objects.filter(IdKlienta=LatestData).update(MojPrad=5000)
+        klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(MojPrad=5000)
     else:
         print(request.POST)
         LatestData = klient.objects.latest("data").IdKlienta
-        klient.objects.filter(IdKlienta=LatestData).update(MojPrad=0)
-
+        klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(MojPrad=0)
 
     return render(request, 'TypKlienta/kalkulacjaulgidotacje.html', {
     })
 
-
-
-
-
-
 def PodsumowanieBezDotacji(request):
-
     LatestDataKlient = klient.objects.latest("data").data
+    LatestData = klient.objects.latest("data").IdKlienta
+    KlientImie = klient.objects.get(IdKlienta=LatestData,KamId = request.user).imie
+    KlientNazwisko = klient.objects.get(IdKlienta=LatestData, KamId=request.user).nazwisko
+    KlientUlica = klient.objects.get(IdKlienta=LatestData, KamId=request.user).ulica
+    KlientMiasto = klient.objects.get(IdKlienta=LatestData, KamId=request.user).miasto
+    KlientTelefon  = klient.objects.get(IdKlienta=LatestData, KamId=request.user).telefon
+    KlientMocInstalacji = klient.objects.get(IdKlienta=LatestData, KamId=request.user).MocInstalacji
+    KlientModuly = klient.objects.get(IdKlienta=LatestData, KamId=request.user).NazwaModulu
+    KlientFalownik = klient.objects.get(IdKlienta=LatestData, KamId=request.user).NazwaFalownika
+    KlientSystemMontazowy = klient.objects.get(IdKlienta=LatestData, KamId=request.user).NazwaSystemuMontazowego
+    KlientMocModulu = Moduly.objects.get(model=KlientModuly).moc
+    KlientLiczbaAC = klient.objects.get (IdKlienta = LatestData, KamId = request.user).IloscSkrzynekAC
+    KlientLiczbaStringow = klient.objects.get (IdKlienta = LatestData, KamId = request.user).IloscStringow
+    KlientIloscModulow = klient.objects.get (IdKlienta = LatestData, KamId = request.user).LiczbaModulow
+    KlientMojPrad = klient.objects.get (IdKlienta = LatestData, KamId = request.user).MojPrad
 
     obliczenie1 = PodsumowanieBezDotacjiCalc()
     PodsumowanieWynik = obliczenie1.count_PodsumowanieBezDotacjiCalc()[0]
     PodsumowanieWynikBrutto = obliczenie1.count_PodsumowanieBezDotacjiCalc()[1]
     LatestData = klient.objects.latest("data").IdKlienta
-    klient.objects.filter(IdKlienta=LatestData).update(KosztInstalacjiNetto=PodsumowanieWynik)
-    klient.objects.filter(IdKlienta=LatestData).update(KosztInstalacjiBrutto=PodsumowanieWynikBrutto)
-    PodsumowanieWynik=klient.objects.last().KosztInstalacjiNetto
-    PodsumowanieWynikBrutto= klient.objects.last().KosztInstalacjiBrutto
+    klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(KosztInstalacjiNetto=PodsumowanieWynik)
+    klient.objects.filter(IdKlienta=LatestData,KamId = request.user).update(KosztInstalacjiBrutto=PodsumowanieWynikBrutto)
+    PodsumowanieWynik=klient.objects.get(IdKlienta=LatestData,KamId = request.user).KosztInstalacjiNetto
+    PodsumowanieWynikBrutto= klient.objects.get(IdKlienta=LatestData,KamId = request.user).KosztInstalacjiBrutto
 
-    return render(request, 'TypKlienta/podsumowaniebezdotacji.html', {
-                                                                        'PodsumowanieBezDotacji': PodsumowanieWynik,
-        'LatestDataKlient': LatestDataKlient,
-            'PodsumowanieBezDotacjiBrutto': PodsumowanieWynikBrutto
-                                                                     })
-
-
+    return render (request, 'TypKlienta/podsumowaniebezdotacji.html', {
+        'PodsumowanieWynikBrutto': PodsumowanieWynikBrutto,
+        'LatestDataKlient': LatestDataKlient, 'KlientImie': KlientImie, 'KlientNazwisko': KlientNazwisko,
+        'KlientUlica': KlientUlica,'KlientMocInstalacji': KlientMocInstalacji,'KlientModuly': KlientModuly,'KlientFalownik': KlientFalownik,'KlientSystemMontazowy': KlientSystemMontazowy,'KlientMojPrad': KlientMojPrad,
+        'KlientMiasto': KlientMiasto, 'KlientTelefon': KlientTelefon,'KlientLiczbaAC': KlientLiczbaAC,'KlientLiczbaStringow': KlientLiczbaStringow,'KlientMocModulu': KlientMocModulu,'KlientIloscModulow': KlientIloscModulow,
+        'PodsumowanieBezDotacjiBrutto': PodsumowanieWynikBrutto
+    })
 
 
 def register(request):
@@ -541,7 +545,6 @@ def register(request):
             user = authenticate(username=username, password=raw_password)
             login(request, user)
             return redirect('index')
-
     else:
         form = SignUpForm()
     return render(request, 'TypKlienta/register.html', {'form': form})

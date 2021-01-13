@@ -6,36 +6,119 @@
 {% load myTags %}
 
 {% block title %}Kalkulacja cenowa{% endblock %}
-
 {% block content %}
-  <h3>Podsumowanie końcowe</h3>
+<script>
+	let print = () => {
+    	let objFra = document.getElementById('myFrame');
+        objFra.contentWindow.focus();
+        objFra.contentWindow.print();
+    }
 
-       <div class="container-fluid">
+    // Using regular js features.
+
+//     function print() {
+//         var objFra = document.getElementById('myFrame');
+//         objFra.contentWindow.focus();
+//         objFra.contentWindow.print();
+//     }
+</script>
+<h3>Podsumowanie końcowe</h3>
+<br>
+<br>
+<div class="container-fluid">
     <!-- Control the column width, and how they should appear on different devices -->
     <div class="row">
-      <div class="col-sm-6" style="background-color:;">
-             <p><b> Ofertę sporządził:</b> {{user.first_name}} {{user.last_name}}</p>
-        <p><b> Tel:</b> {{user.profile.phone}} <b>email: </b> {{user.email}}</p>
-      </div>
-      <div class="col-sm-6" style="background-color:;">
-             <p><b> Data:</b> {{LatestDataKlient}} </p>
+        <div class="col-sm-4" style="background-color:;">
+            <p><b> Ofertę sporządził:</b> {{user.first_name}} {{user.last_name}}</p>
+            <p><b> Tel:</b> {{user.profile.phone}} <b>email: </b> {{user.email}}</p>
+        </div>
+        <div class="col-sm-4" style="background-color:;"></div>
+        <div class="col-sm-4" style="background-color:;">
+            <p><b> Data:</b> {{LatestDataKlient}} </p>
 
-      </div>
+        </div>
+        <div class="col-sm-4" style="background-color:;"></div>
     </div>
 
-            <div class="row">
-      <div class="col-sm-4" style="background-color:yellow;">33.33%</div>
-      <div class="col-sm-4" style="background-color:orange;"> <h1>Oferta na system fotowoltaiczny firmy: </h1></div>
-      <div class="col-sm-4" style="background-color:yellow;">33.33%</div>
+    <div class="row">
+        <div class="col-sm-4" style="background-color:;"></div>
+        <div class="col-sm-4" style="background-color:;"><h2>Oferta na system fotowoltaiczny firmy: </h2></div>
+        <div class="col-sm-4" style="background-color:;"></div>
     </div>
-<form method=POST action="">
-    <p> Koszty</p>
-    {% csrf_token %}
+    <br>
+    <br>
+    <div class="row">
+        <div class="col-sm-3" style="background-color:;"><p> {{KlientImie}} {{KlientNazwisko}}</p></div>
+        <div class="col-sm-3" style="background-color:;"><p>Adres: {{KlientUlica}} {{KlientMiasto}}</p></div>
+        <div class="col-sm-3" style="background-color:;"><p>telefon kontaktowy: {{KlientTelefon}}</p></div>
+    </div>
+    <br>
+    <br>
 
-  <p> {{PodsumowanieBezDotacji}}</p>
-    {{PodsumowanieBezDotacjiBrutto}}
+    <div class="row">
+        <b>
+            <div class="col-sm-3">Moc instalacji</div>
+            <div class="col-sm-3">Moduły fotowoltaiczne</div>
+            <div class="col-sm-3">Inwerter</div>
+            <div class="col-sm-3">System montażowy</div>
+        </b>
+    </div>
+    <div class="row">
+
+            <div class="col-sm-3">{{KlientMocInstalacji}}</div>
+            <div class="col-sm-3">{{KlientModuly}}</div>
+            <div class="col-sm-3">{{KlientFalownik}}</div>
+            <div class="col-sm-3">{{KlientSystemMontazowy}}</div>
+
+    </div>
+    <br>
+    <br>
+<div class="row">
+        <b>
+            <div class="col-sm-3">Moc modułu</div>
+            <div class="col-sm-3">Liczba skrzynek AC</div>
+            <div class="col-sm-3">Liczba stringów</div>
+            <div class="col-sm-3">Ilość modułów</div>
+        </b>
+    </div>
+<div class="row">
+
+            <div class="col-sm-3">{{KlientMocModulu}}</div>
+            <div class="col-sm-3">{{KlientLiczbaAC}}</div>
+            <div class="col-sm-3">{{KlientLiczbaStringow}}</div>
+            <div class="col-sm-3">{{KlientIloscModulow}}</div>
+
+    </div>
+
+    <br>
+    <br>
+    <br>
+      <div class="row">
+
+            <div class="col"><h3><center><b>Podsumowanie kosztów instalacji</b></center></h3>
+    </div>
+              <div class="row">
+
+            <div class="col" style="background-color:#191970;color: white;"><h2><center><b>Program Mój Prąd</b></center></h2>
+            <h3><center><b> - {{KlientMojPrad}} zł </b></center></h3></div>
+
+    </div>
+<div class="row">
+
+            <div class="col" style="background-color:#FFD700;"><h2><center><b>Proponowana cena instalacji</b></center></h2>
+            <h3><center><b>{{PodsumowanieWynikBrutto}} zł brutto</b></center></h3></div>
+
+    </div>
+<br>
+          <form>
+
+<button type="button" class="btn btn-primary"  onClick="window.print()">Drukuj ofertę</button>
 
 </form>
+ <br>
+          <br>
+</div>
+
 </div>
 
 

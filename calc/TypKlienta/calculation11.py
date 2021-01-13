@@ -31,7 +31,7 @@ class PodsumowanieBezDotacjiCalc():
 
     def __init__(self):
 
-        self.PodsumowanieWynik1=  self.WartoscModulowStr + self.WartoscFalownikowStr + self.WartoscSystemuMontazowegoStr + self.WartoscSkrzynekACStr +self.WartoscStringowStr + self.WartoscOkablowaniaACStr +self.WartoscOkablowaniaDCStr +self.KosztTransportuStr +self.KosztMontazuStr +self.KosztWiFiExtenderStr + self.KosztZwyszkaStr + self.KosztPPOZStr + self.KosztPracGruntowychStr
+        self.PodsumowanieWynik1=  self.WartoscModulowStr + self.WartoscFalownikowStr + self.WartoscSystemuMontazowegoStr + self.WartoscSkrzynekACStr +self.WartoscStringowStr + self.WartoscOkablowaniaACStr +self.WartoscOkablowaniaDCStr +self.KosztTransportuStr +self.KosztMontazuStr +self.KosztWiFiExtenderStr + self.KosztZwyszkaStr + self.KosztPPOZStr
         self.PodsumowanieWynik2 = self.PodsumowanieWynik1 / (1-self.MarzaFirmyStr)
         self.PodsumowanieWynik = self.PodsumowanieWynik2 + (self.MarzaHandlowcaStr * self.MocModulowStr)
 
