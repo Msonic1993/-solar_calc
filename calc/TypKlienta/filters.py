@@ -8,7 +8,7 @@ class KlientFilter(django_filters.FilterSet):
         class Meta:
             model = klient
 
-            fields = ['imie', 'nazwisko']
+            fields = ['imie', 'nazwisko','miasto']
         @property
         def qs(self):
             if self.request.user.is_authenticated:
