@@ -1,0 +1,50 @@
+{% extends 'TypKlienta/base.html' %}
+{% load sitetree %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+{% load myTags %}
+
+{% block title %}Kalkulacja cenowa{% endblock %}
+
+{% block content %}
+<h4>Sugerowana moc instalacji wynosi: {{SugerowanaMoc}} kWp</h4>
+<h4>Nazwa modułu : {{NazwaModuluStr}} </h4>
+<h4>Liczba modułów: {{LiczbaModulowStr}} </h4>
+<h4>Nazwa falownika : {{NazwaFalownikaStr}} </h4>
+<h4>Liczba falowników: {{LiczbaFalownikowStr}} </h4>
+<h4>Nazwa optymalizatora mocy : {{NazwaOptyalizatorowStr}} </h4>
+<h4>Liczba optymalizoatorów mocy: {{LiczbaOptyalizatorowStr}} </h4>
+<h4>Nazwa systemu montażowego: {{NazwaSystemuMontazowegoStr}} </h4>
+
+<br>
+<div>
+<form method=POST action="">
+    <p>Czy będą przeprowadzane prace gruntowe?</p>
+    {% csrf_token %}
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="checkbox" name="inlineRadioOptions" id="GroundWorksCheck" onclick="GroundWorksFunction()">
+  <label class="form-check-label" for="GroundWorksCheck"> Tak  </label>
+    <br>
+     <input class="form-check-input" type="checkbox" name="inlineRadioOptions" id="GroundWorksCheck1" onclick="GroundWorksFunction()">
+
+  <label class="form-check-label" for="GroundWorksCheck1"> Nie </label>
+</div>
+<input id="textM2" name="modelformIloscM2" style="display:none" placeholder="Wpisz ilość m2">
+    {% if modelformIloscM2 is None %}
+ <input id="textM2" name="modelformIloscM2" style="display:none" value =0.00 placeholder="Wpisz ilość m2">
+{% endif %}
+    <br><br>
+  <button type="submit" value="oblicz" class="btn btn-primary">Oblicz</button>
+
+</form>
+        <p>wartość: {{ KosztPracGruntowych1 }}  </p>
+        <p>Wybrano: {{ modelformIloscM2 }}  </p>
+
+</div>
+ <br><br>
+<div>
+     <a href="/kalkulacjaelementydodatkowe"> <button type="submit" class="btn btn-info">Przejdz do nastepnego kroku</button></a>
+</div>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'TypKlienta/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<li class="nav-item">
+  <a class="nav-link" href="/"
+    onClick="document.getElementById('logoutform').submit()">
+    Logout
+  </a>
+</li>
+<form id="logoutform" method="POST" action="{% url 'account_logout' %}">
+  {% csrf_token %}
+  <input type="hidden">
+</form>
+
+ {% endblock %}

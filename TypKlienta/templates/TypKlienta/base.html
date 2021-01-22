@@ -1,0 +1,110 @@
+{% load sitetree %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+{% load myTags %}
+
+
+<html lang="pl">
+<head>
+    <style>img {
+  opacity: 0.5;
+}
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src=" {% static 'js/tablesort.js' %}"></script>
+    <script src=" {% static 'js/groundworksyesno.js' %}"></script>
+    <script src=" {% static 'js/printpdf.js' %}"></script>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href=" {% static 'css/style.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
+    <title>Aplikacja</title>
+
+</head>
+<body style="background-image: url(static/bg1.jpg);
+    background-color: #007eff0a;
+    background-repeat: no-repeat;
+    position: relative;
+    background-size: cover;
+    background-position: center;">
+<div class="page-header">
+
+
+    {% sitetree_menu from "main_menu" include "trunk, topmenu"%}
+
+    <br><br>
+    {% if user.is_authenticated %}
+
+    <p> Jesteś zalogowany jako : {{user}}
+        <button type="button" class="btn btn-default dropdown-toggle"><a href="/logout"> Wyloguj się</a></button>
+    </p>
+    {% else %}
+    <p> Niezalogowany </p>
+    {% endif %}
+
+</div>
+<div class="container" style="width:100%">
+
+    <div class="col">
+        <div class="row" style="margin-right: 5px;margin-left: 5px;">
+        </div>
+
+        </head>
+
+
+        {% if user.is_authenticated %}
+        {% block content %}
+        {% endblock %}
+        {% else %}
+        
+        <div class="containerLoginAsk">
+            <h1>
+                <center>Witamy!</center>
+            </h1>
+            <div class="vertical-centerLoginAsk">
+                <a href="/login">
+                    <button type="button" class="btn btn-primary btn-lg btn-block">Kliknij tutaj by się zalogować.
+                    </button>
+                </a>
+            </div>
+        </div>
+        {% endif %}
+        <div>
+
+        </div>
+
+        <footer id="sticky-footer" class="py-4 bg-dark text-white-50" style="  background-color: #222222;
+    position: fixed;
+    bottom: 0px;
+    left: 0;
+    width: 100%;
+    padding: 17px;">
+            <div class="container text-center">
+                <small style="color: white;  ">Copyright &copy; 2020</small>
+            </div>
+        </footer>
+
+        <script type="text/javascript" charset="utf8"
+                src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+                integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+                crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+                integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+                crossorigin="anonymous"></script>
+    </div>
+</div>
+</body>
+</html>

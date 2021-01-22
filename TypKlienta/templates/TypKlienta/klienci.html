@@ -1,0 +1,106 @@
+{% extends 'TypKlienta/base.html' %}
+{% load sitetree %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+  <form method="get">
+    <div class="well">
+      <h4 style="margin-top: 0">Wyszukaj po filtrze:</h4>
+      <div class="row">
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.imie.label_tag }}
+          {% render_field filter.form.imie class="form-control" %}
+        </div>
+           <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.nazwisko.label_tag }}
+          {% render_field filter.form.nazwisko class="form-control" %}
+        </div>
+             <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.miasto.label_tag }}
+          {% render_field filter.form.miasto class="form-control" %}
+        </div>
+          <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.KamId.label_tag }}
+          {% render_field filter.form.KamId class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.year_joined.label_tag }}
+          {% render_field filter.form.year_joined class="form-control" %}
+        </div>
+        <div class="form-group col-sm-8 col-md-6">
+          {{ filter.form.groups.label_tag }}
+
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <span class="glyphicon glyphicon-search"></span> Wyszukaj klienta
+      </button>
+
+    </div>
+  </form>
+<form action="/klienci/">
+ <button type="submit" class="btn btn-info">Resetuj filtr</button>
+
+</form>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+<div class="container-fluid">
+<div class="table-responsive-sm">
+  <table id="CustomerTable" class="table table-bordered">
+     <thead class="thead">
+      <tr class="bg-primary">
+        <th onclick="sortTable(0)">Imię</th>
+       <th onclick="sortTable(0)">Nazwisko</th>
+        <th>Ulica</th>
+        <th>Miasto</th>
+        <th>Telefon</th>
+        <th>Typ klienta</th>
+        <th>Zużycie</th>
+        <th>Wymagana moc</th>
+        <th>Nazwa modułu</th>
+          <th>Nazwa falownika</th>
+          <th>Koszt instalacji Brutto</th>
+
+
+
+      </tr>
+    </thead>
+    <tbody>
+      {% for klient in filter.qs  %}
+
+        <tr>
+          <td>{{ klient.imie }}</td>
+          <td>{{ klient.nazwisko  }}</td>
+          <td>{{ klient.ulica }}</td>
+          <td>{{ klient.miasto }}</td>
+          <td>{{ klient.telefon }}</td>
+          <td>{{ klient.typ }}</td>
+          <td>{{ klient.zuzycie }}</td>
+          <td>{{ klient.WymaganaMoc }}</td>
+          <td>{{ klient.NazwaModulu }}</td>
+          <td>{{ klient.NazwaFalownika }}</td>
+          <td>{{ klient.KosztInstalacjiBrutto }}</td>
+
+            <td><button type="button" class="btn btn-danger">Usuń klienta <a class="btn" href="{% url 'post_remove' pk=klient.pk %}"><span class="glyphicon glyphicon-remove"></span></a></button></td>
+
+
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="5">No data</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+     <br><br>
+</div>
+</div>
+
+
+{% endblock %}

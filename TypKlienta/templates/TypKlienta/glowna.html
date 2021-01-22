@@ -1,0 +1,28 @@
+{% extends 'TypKlienta/base.html' %}
+{% load sitetree %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+{% load myTags %}
+{% block content %}
+<div class="container">
+   <h1>
+      <center>Witamy!</center>
+   </h1>
+   <div class="input_name">
+      <h3>
+         <center>Wybierz co chcesz zrobić</center>
+      </h3>
+   </div>
+   <div style="padding: 1px;
+      margin-left: 34%;
+      margin-top: 36px;
+      ">
+      <a  href="/rozpoczeciekalkulacji"> <button style="margin: 0px;" type="submit" class="btn btn-info">Rozpocznij kalkulację systemu fotowoltaicznego >></button></a>
+   </div>
+</div>
+<div style="    padding: 22px;
+   margin-left: 44%;">
+   <a  href="/klienci"> <button style="margin: 0px;" type="submit" class="btn btn-info">Wyświetl listę klientów >></button></a>
+</div>
+{% endblock %}
